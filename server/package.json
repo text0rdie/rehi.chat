@@ -1,0 +1,10 @@
+{
+    "name": "rehi-chat-server",
+    "license": "ISC",
+    "version": "0.1.0",
+    "description": "The chat server running https://rehi.chat",
+    "repository": "https://github.com/text0rdie/rehi.chat.git",
+    "dependencies": {
+        "ws": "^7.1.2"
+    }
+}

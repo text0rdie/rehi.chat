@@ -1,0 +1,108 @@
+html {
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+ul {
+    padding-left: 30px;
+}
+
+textarea {
+    width: calc(100% - 13px);
+    background-color: #18181F;
+    border: 1px solid #3399FF;
+    color: #FFFFFF;
+    padding: 5px;
+    height: 30px;
+}
+
+#main {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    background-color: #18181F;
+    color: #FFFFFF;
+    height: 100vh;
+}
+
+#server {
+    display: grid;
+    grid-template-rows: 60px auto;
+    padding-bottom: 15px;
+}
+
+#server > div {
+    padding: 15px 20px 0px 15px;
+}
+
+#server > #nick {
+    background-color: #3399FF;
+    color: #323844;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+#server > .rows {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-row-gap: 15px;
+}
+
+.tabs {
+    display: grid;
+    grid-template-rows: 30px auto;
+    grid-row-gap: 15px;
+}
+
+.tabs > .head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25px, max-content));
+    grid-column-gap: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.tabs > .head > div {
+    padding: 0px 10px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.tabs > .head > div:hover,
+.tabs > .head > div.active {
+    border-bottom: 2px solid #3399FF;
+}
+
+.tabs > .body {
+    background-color: #323844;
+    font-size: 0.9rem;
+}
+
+#chat {
+    background-color: #323844;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    display: grid;
+    grid-template-rows: auto 50px;
+    grid-row-gap: 15px;
+    align-items: end;
+    padding: 15px;
+}
+
+#channel {
+    display: grid;
+    grid-template-rows: 100%;
+}
+
+#channel > div {
+    padding: 15px 15px 0px 20px;
+}
+
+#channel > .rows {
+    display: grid;
+    grid-template-rows: 100%;
+}
