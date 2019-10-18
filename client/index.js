@@ -22,10 +22,24 @@ for (const th of tabHeads) {
 const ws = new WebSocket("ws://localhost:8080")
 
 ws.onmessage = function(message) {
-    var content = document.createElement('div')
-    content.innerHTML = message.data
+    var content = message.data
     
-    document.querySelector('#chat #output').appendChild(content)
+    nameFind = /(<span class="highlight-name">)(.*?)(<\/span>)/
+    nameReplace = '$1<a href="/user/" target="_blank">$2</a>$3'
+    content = content.replace(nameFind, nameReplace)
+    content = '<div class="content">' + content + '</div>'
+    
+    const date = new Date().toLocaleString()
+    const data = '<div class="data">' + date + '</div>'
+    
+    var div = document.createElement('div')
+    div.className = 'message'
+    div.innerHTML = content + data
+    
+    document.querySelector('#chat #output').appendChild(div)
+    
+    var scrollbar = document.querySelector('#chat .scrollbar')
+    scrollbar.scrollTop = scrollbar.scrollHeight - scrollbar.clientHeight
 }
 
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {

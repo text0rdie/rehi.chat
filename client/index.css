@@ -13,7 +13,7 @@ ul {
 }
 
 textarea {
-    width: calc(100% - 13px);
+    width: 100%;
     background-color: #18181F;
     border: 1px solid #3399FF;
     color: #FFFFFF;
@@ -39,7 +39,7 @@ textarea {
     padding: 15px 20px 0px 15px;
 }
 
-#server > #nick {
+#server > #name {
     background-color: #3399FF;
     color: #323844;
     font-size: 1.5rem;
@@ -84,13 +84,56 @@ textarea {
 
 #chat {
     background-color: #323844;
-    font-size: 0.9rem;
-    line-height: 1.5;
     display: grid;
     grid-template-rows: auto 50px;
     grid-row-gap: 15px;
+    padding-bottom: 10px;
+    min-height: 0px;
+}
+
+#chat > .scrollbar {
+    display: grid;
     align-items: end;
-    padding: 15px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FFFFFF #323844;
+}
+
+#chat > .scrollbar::-webkit-scrollbar {
+    width: 7px;
+}
+
+#chat > .scrollbar::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+}
+
+#chat #output > .message {
+    display: grid;
+    grid-template-columns: auto minmax(150px, max-content);
+    grid-column-gap: 15px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    border-top: 1px solid #18181F;
+    padding: 10px 15px;
+}
+
+#chat #output > .message > .data {
+    text-align: right;
+}
+
+#chat #output > .message a {
+    color: #3399FF;
+    padding-bottom: 2px;
+    text-decoration: none;
+    border-bottom: 2px solid #3399FF;
+}
+
+#chat > #input {
+    padding: 0px 15px;
+}
+
+#chat > #input > textarea {
+    width: calc(100% - 12px);
 }
 
 #channel {
@@ -105,4 +148,9 @@ textarea {
 #channel > .rows {
     display: grid;
     grid-template-rows: 100%;
+}
+
+.highlight-says {
+    display: block;
+    margin-bottom: 10px;
 }
