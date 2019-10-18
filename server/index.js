@@ -1,16 +1,25 @@
+const fs = require('fs')
+const path = require('path')
+const https = require('https')
 const WebSocket = require('ws')
 
-const config = { port: 8080 }
-const server = new WebSocket.Server(config)
+const port = 8080
+const tlsServer = https.createServer({
+    cert: fs.readFileSync(path.resolve(__dirname, 'public.pem')),
+     key: fs.readFileSync(path.resolve(__dirname, 'secret.pem'))
+})
+
+const config = { server: tlsServer }
+const wssServer = new WebSocket.Server(config)
 
 var users = []
 var guest = 0
 
-server.on('listening', function(ws, request) {
-    console.log('listening on *:' + config.port)
+wssServer.on('listening', function(ws, request) {
+    console.log('listening on *:' + port)
 })
 
-server.on('connection', function(ws, request) {
+wssServer.on('connection', function(ws, request) {
     const clientId = request.headers['sec-websocket-key']
     var clientName = 'Ghost'
     
@@ -38,6 +47,8 @@ server.on('connection', function(ws, request) {
     })
 })
 
+tlsServer.listen(port)
+
 function highlight(text, type) {
     return '<span class="highlight-' + type + '">' + text + '</span>'
 }
@@ -55,7 +66,7 @@ function createGuest(clientId) {
 }
 
 function sendToAll(message, exclude) {
-    server.clients.forEach(function each(client) {
+    wssServer.clients.forEach(function each(client) {
         if (client != exclude && client.readyState === WebSocket.OPEN) {
             client.send(message)
         }
