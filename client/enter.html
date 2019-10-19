@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rehi</title>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="enter.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="main">
+        <div id="server">
+            <div id="name">@ text0rdie</div>
+            
+            <div class="rows">
+                <div class="tabs">
+                    <div class="head">
+                        <div class="active" data-id="channels">Channels</div>
+                        <div data-id="friends">Friends / Ignore</div>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="channels">
+                        <ul>
+                            <li>Channels</li>
+                            <li>Private</li>
+                            <li>Mentions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="friends" style="display: none">
+                        <ul><li>Friends / Ignore</li></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="chat">
+            <div class="scrollbar">
+                <div id="output"></div>
+            </div>
+            
+            <div id="input">
+                <textarea rows="1" autofocus></textarea>
+            </div>
+        </div>
+        
+        <div id="channel">
+            <div class="rows">
+                <div class="tabs">
+                    <div class="head">
+                        <div class="active" data-id="info">Channel</div>
+                        <div data-id="users">Users</div>
+                        <div data-id="wiki">Wiki</div>
+                        <div data-id="blogs">Blogs</div>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="info">
+                        <ul><li>Channel</li></ul>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="users" style="display: none">
+                        <ul><li>Users</li></ul>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="wiki" style="display: none">
+                        <ul><li>Wiki</li></ul>
+                    </div>
+                    
+                    <div class="body" data-type="block" id="blogs" style="display: none">
+                        <ul><li>Blogs</li></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="enter.js"></script>
+</body>
+
+</html>

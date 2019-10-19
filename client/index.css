@@ -8,30 +8,6 @@ body {
     padding: 0px;
 }
 
-ul {
-    padding-left: 30px;
-    line-height: 1.7;
-}
-
-textarea {
-    width: 100%;
-    background-color: #18181F;
-    border: 1px solid #3399FF;
-    color: #FFFFFF;
-    padding: 5px;
-    height: 30px;
-    scrollbar-width: thin;
-    scrollbar-color: #FFFFFF #323844;
-}
-
-textarea::-webkit-scrollbar {
-    width: 7px;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background-color: #FFFFFF;
-}
-
 a {
     color: #3399FF;
     padding-bottom: 2px;
@@ -41,127 +17,69 @@ a {
 
 #main {
     display: grid;
-    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: 60px auto;
     background-color: #18181F;
     color: #FFFFFF;
     height: 100vh;
 }
 
-#server {
+#main > #head {
     display: grid;
-    grid-template-rows: 60px auto;
-    padding-bottom: 15px;
-}
-
-#server > div {
-    padding: 15px 20px 0px 15px;
-}
-
-#server > #name {
+    grid-template-columns: auto minmax(150px, max-content);
+    grid-column-gap: 15px;
     background-color: #3399FF;
     color: #323844;
     font-size: 1.5rem;
     font-weight: 700;
+    padding: 15px;
 }
 
-#server > .rows {
-    display: grid;
-    grid-template-rows: 100%;
-    grid-row-gap: 15px;
+#main > #head > #social {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 1.2rem;
+    color: #FFFFFF;
 }
 
-.tabs {
-    display: grid;
-    grid-template-rows: 30px auto;
-    grid-row-gap: 15px;
+#main > #head > #social a {
+    color: #FFFFFF;
+    border-bottom: 2px solid #FFFFFF;
 }
 
-.tabs > .head {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25px, max-content));
-    grid-column-gap: 25px;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-.tabs > .head > div {
+#main > #head > #social .bullet {
     padding: 0px 10px;
-    height: 25px;
-    cursor: pointer;
 }
 
-.tabs > .head > div:hover,
-.tabs > .head > div.active {
-    border-bottom: 2px solid #3399FF;
-}
-
-.tabs > .body {
-    background-color: #323844;
-    font-size: 0.9rem;
-}
-
-#chat {
-    background-color: #323844;
+#main > #body {
+    padding: 15px;
     display: grid;
-    grid-template-rows: auto 50px;
+    grid-template-rows: 40px repeat(auto-fit, 25px);
     grid-row-gap: 15px;
-    padding-bottom: 10px;
-    min-height: 0px;
+    font-size: 1.5rem;
 }
 
-#chat > .scrollbar {
-    display: grid;
-    align-items: end;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #FFFFFF #323844;
+#main > #body .bullet {
+    color: #3399FF;
+    padding-right: 15px;
+    padding-left: 17px;
 }
 
-#chat > .scrollbar::-webkit-scrollbar {
-    width: 7px;
+#main > #body > :last-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 55px;
 }
 
-#chat > .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #FFFFFF;
+#main > #body .button {
+    background-color: #323844;
+    color: #FFFFFF;
+    padding: 15px;
+    border: none;
 }
 
-#chat #output > .message {
-    display: grid;
-    grid-template-columns: auto minmax(150px, max-content);
-    grid-column-gap: 15px;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    border-top: 1px solid #18181F;
-    padding: 10px 15px;
-}
-
-#chat #output > .message > .data {
-    text-align: right;
-}
-
-#chat > #input {
-    padding: 0px 15px;
-}
-
-#chat > #input > textarea {
-    width: calc(100% - 12px);
-}
-
-#channel {
-    display: grid;
-    grid-template-rows: 100%;
-}
-
-#channel > div {
-    padding: 15px 15px 0px 20px;
-}
-
-#channel > .rows {
-    display: grid;
-    grid-template-rows: 100%;
-}
-
-.highlight-says {
-    display: block;
-    margin-bottom: 10px;
+#main > #body .arrow {
+    color: #3399FF;
+    padding-left: 15px;
 }
