@@ -10,6 +10,7 @@ body {
 
 ul {
     padding-left: 30px;
+    line-height: 1.7;
 }
 
 textarea {
@@ -19,6 +20,23 @@ textarea {
     color: #FFFFFF;
     padding: 5px;
     height: 30px;
+    scrollbar-width: thin;
+    scrollbar-color: #FFFFFF #323844;
+}
+
+textarea::-webkit-scrollbar {
+    width: 7px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+}
+
+a {
+    color: #3399FF;
+    padding-bottom: 2px;
+    text-decoration: none;
+    border-bottom: 2px solid #3399FF;
 }
 
 #main {
@@ -119,13 +137,6 @@ textarea {
 
 #chat #output > .message > .data {
     text-align: right;
-}
-
-#chat #output > .message a {
-    color: #3399FF;
-    padding-bottom: 2px;
-    text-decoration: none;
-    border-bottom: 2px solid #3399FF;
 }
 
 #chat > #input {

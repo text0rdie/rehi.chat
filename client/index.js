@@ -19,6 +19,7 @@ for (const th of tabHeads) {
     })
 }
 
+// chrome://flags/#allow-insecure-localhost must be enabled when testing locally in Chrome
 const ws = new WebSocket('wss://' + window.location.hostname + ':8080')
 
 ws.onmessage = function(message) {
@@ -62,7 +63,7 @@ function channelUsers(users) {
     
     for (var id in users) {
         var userItem = document.createElement('li')
-        userItem.innerHTML = users[id].name
+        userItem.innerHTML = '<a href="/user/" target="_blank">' + users[id].name + '</a>'
         
         userList.appendChild(userItem)
     }
