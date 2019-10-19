@@ -24,26 +24,32 @@ wssServer.on('connection', function(ws, request) {
     var clientName = 'Ghost'
     
     if (users.hasOwnProperty(clientId) === false) {
-        createGuest(clientId)
+        createGuest(clientId, ws)
     }
     
     clientName = users[clientId].name
     
     console.log(clientName + ' has connected')
-    sendToAll(highlight(clientName, 'name') + ' has connected', ws)
+    sendToAll(highlight(clientName, 'name') + ' has connected', 'channel-message', ws)
     
-    ws.send('Welcome! Your name has been auto-generated as ' + highlight(clientName, 'name'))
+    sendUsers(ws)
+    
+    const welcome = 'Welcome! Your name has been auto-generated as ' + highlight(clientName, 'name')
+    const message = createMessage(welcome, 'channel-message')
+    ws.send(message)
     
     ws.on('close', function() {
         console.log(clientName + ' has disconnected')
-        sendToAll(highlight(clientName, 'name') + ' has disconnected', ws)
+        sendToAll(highlight(clientName, 'name') + ' has disconnected', 'channel-message', ws)
+        
+        sendUsers(ws)
     })
     
     ws.on('message', function(message) {
         message = highlight(message, 'message')
         message = highlight(highlight(clientName, 'name') + ' says', 'says') + message
         
-        sendToAll(message)
+        sendToAll(message, 'channel-message')
     })
 })
 
@@ -53,10 +59,12 @@ function highlight(text, type) {
     return '<span class="highlight-' + type + '">' + text + '</span>'
 }
 
-function createGuest(clientId) {
+function createGuest(clientId, ws) {
     guest++
     
     users[clientId] = {
+        client: ws,
+        clientId: clientId,
         name: 'Guest' + guest
     }
     
@@ -65,10 +73,34 @@ function createGuest(clientId) {
     }
 }
 
-function sendToAll(message, exclude) {
-    wssServer.clients.forEach(function each(client) {
-        if (client != exclude && client.readyState === WebSocket.OPEN) {
-            client.send(message)
-        }
+function createMessage(message, type) {
+    return JSON.stringify({
+        content: message,
+        type: type
     })
+}
+
+function sendToAll(message, type, exclude) {
+    for (var id in users) {
+        var client = users[id].client
+         
+        if (client != exclude && client.readyState === WebSocket.OPEN) {
+            client.send(createMessage(message, type))
+        }
+    }
+}
+
+function sendUsers(ws) {
+    var usersInChannel = []
+    
+    for (var id in users) {
+        if (users[id].client.readyState === WebSocket.OPEN) {
+            var user = Object.assign({}, users[id])
+            delete user.client
+            
+            usersInChannel.push(user)
+        }
+    }
+    
+    sendToAll(usersInChannel, 'channel-users')
 }

@@ -22,8 +22,23 @@ for (const th of tabHeads) {
 const ws = new WebSocket('wss://' + window.location.hostname + ':8080')
 
 ws.onmessage = function(message) {
-    var content = message.data
-    
+    try {
+        message = JSON.parse(message.data)
+        
+        switch (message.type) {
+            case 'channel-message' :
+                channelMessage(message.content)
+                break
+            case 'channel-users' :
+                channelUsers(message.content)
+                break
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+function channelMessage(content) {
     nameFind = /(<span class="highlight-name">)(.*?)(<\/span>)/
     nameReplace = '$1<a href="/user/" target="_blank">$2</a>$3'
     content = content.replace(nameFind, nameReplace)
@@ -40,6 +55,19 @@ ws.onmessage = function(message) {
     
     var scrollbar = document.querySelector('#chat .scrollbar')
     scrollbar.scrollTop = scrollbar.scrollHeight - scrollbar.clientHeight
+}
+
+function channelUsers(users) {
+    var userList = document.createElement('ul')
+    
+    for (var id in users) {
+        var userItem = document.createElement('li')
+        userItem.innerHTML = users[id].name
+        
+        userList.appendChild(userItem)
+    }
+    
+    document.querySelector('#channel #users').innerHTML = userList.outerHTML
 }
 
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {
