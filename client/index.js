@@ -71,6 +71,10 @@ function channelUsers(users) {
     document.querySelector('#channel #users').innerHTML = userList.outerHTML
 }
 
+document.querySelector('#welcome #welcome-continue').addEventListener('click', function(event) {
+    document.querySelector('#welcome').style.display = 'none'
+})
+
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {
     if (event.keyCode == 13) {
         ws.send(event.target.value)

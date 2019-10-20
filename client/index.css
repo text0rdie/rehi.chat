@@ -8,6 +8,30 @@ body {
     padding: 0px;
 }
 
+ul {
+    padding-left: 30px;
+    line-height: 1.7;
+}
+
+textarea {
+    width: 100%;
+    background-color: #18181F;
+    border: 1px solid #3399FF;
+    color: #FFFFFF;
+    padding: 5px;
+    height: 30px;
+    scrollbar-width: thin;
+    scrollbar-color: #FFFFFF #323844;
+}
+
+textarea::-webkit-scrollbar {
+    width: 7px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+}
+
 a {
     color: #3399FF;
     padding-bottom: 2px;
@@ -17,69 +41,189 @@ a {
 
 #main {
     display: grid;
-    grid-template-rows: 60px auto;
+    grid-template-columns: 25% 50% 25%;
     background-color: #18181F;
     color: #FFFFFF;
     height: 100vh;
 }
 
-#main > #head {
+#server {
     display: grid;
-    grid-template-columns: auto minmax(150px, max-content);
-    grid-column-gap: 15px;
+    grid-template-rows: 60px auto;
+    padding-bottom: 15px;
+}
+
+#server > div {
+    padding: 15px 20px 0px 15px;
+}
+
+#server > #name {
     background-color: #3399FF;
     color: #323844;
     font-size: 1.5rem;
     font-weight: 700;
-    padding: 15px;
 }
 
-#main > #head > #social {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-    font-size: 1.2rem;
-    color: #FFFFFF;
-}
-
-#main > #head > #social a {
-    color: #FFFFFF;
-    border-bottom: 2px solid #FFFFFF;
-}
-
-#main > #head > #social .bullet {
-    padding: 0px 10px;
-}
-
-#main > #body {
-    padding: 15px;
+#server > .rows {
     display: grid;
-    grid-template-rows: 40px repeat(auto-fit, 25px);
+    grid-template-rows: 100%;
     grid-row-gap: 15px;
-    font-size: 1.5rem;
 }
 
-#main > #body .bullet {
-    color: #3399FF;
-    padding-right: 15px;
-    padding-left: 17px;
+.tabs {
+    display: grid;
+    grid-template-rows: 30px auto;
+    grid-row-gap: 15px;
 }
 
-#main > #body > :last-child {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 55px;
+.tabs > .head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25px, max-content));
+    grid-column-gap: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
-#main > #body .button {
+.tabs > .head > div {
+    padding: 0px 10px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.tabs > .head > div:hover,
+.tabs > .head > div.active {
+    border-bottom: 2px solid #3399FF;
+}
+
+.tabs > .body {
     background-color: #323844;
-    color: #FFFFFF;
-    padding: 15px;
-    border: none;
+    font-size: 0.9rem;
 }
 
-#main > #body .arrow {
-    color: #3399FF;
-    padding-left: 15px;
+#chat {
+    background-color: #323844;
+    display: grid;
+    grid-template-rows: auto 50px;
+    grid-row-gap: 15px;
+    padding-bottom: 10px;
+    min-height: 0px;
+}
+
+#chat > .scrollbar {
+    display: grid;
+    align-items: end;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #FFFFFF #323844;
+}
+
+#chat > .scrollbar::-webkit-scrollbar {
+    width: 7px;
+}
+
+#chat > .scrollbar::-webkit-scrollbar-thumb {
+    background-color: #FFFFFF;
+}
+
+#chat #output > .message {
+    display: grid;
+    grid-template-columns: auto minmax(150px, max-content);
+    grid-column-gap: 15px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    border-top: 1px solid #18181F;
+    padding: 10px 15px;
+}
+
+#chat #output > .message > .data {
+    text-align: right;
+}
+
+#chat > #input {
+    padding: 0px 15px;
+}
+
+#chat > #input > textarea {
+    width: calc(100% - 12px);
+}
+
+#channel {
+    display: grid;
+    grid-template-rows: 100%;
+}
+
+#channel > div {
+    padding: 15px 15px 0px 20px;
+}
+
+#channel > .rows {
+    display: grid;
+    grid-template-rows: 100%;
+}
+
+.highlight-says {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.modal {
+    background-color: rgba(24, 24, 31, 0.5);
+    left: 0px; top: 0px;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.modal-content {
+    display: grid;
+    grid-template-rows: auto;
+    grid-row-gap: 15px;
+    background-color: #18181F;
+    border: 1px solid #3399FF;
+    margin: 60px auto;
+    padding: 20px;
+    width: 600px;
+    color: #FFFFFF;
+}
+
+.modal-content > .modal-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+    grid-column-gap: 15px;
+    justify-content: end;
+}
+
+.modal-button {
+    background-color: #323844;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.modal-button.primary {
+    background-color: #3399FF;
+    color: #18181F;
+}
+
+#welcome #welcome-login {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+    grid-column-gap: 15px;
+    justify-content: end;
+}
+
+#welcome #welcome-login input {
+    padding: 10px;
+    width: 200px;
+}
+
+#welcome #welcome-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+#welcome ul {
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
