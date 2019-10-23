@@ -80,8 +80,8 @@
     <div class="modal" id="welcome">
         <div class="modal-content">
             <div id="welcome-login">
-                <div><input type="text" placeholder="Username"></div>
-                <div><input type="text" placeholder="Password"></div>
+                <div><div><input type="checkbox" value="1" id="welcome-remember">Remember Me</div></div>
+                <div><input type="text" placeholder="Username" id="welcome-username"></div>
                 <div class="modal-button primary">Login</div>
             </div>
             
@@ -89,8 +89,9 @@
                 Rehi is a worldwide chat community built for you.
             </div>
             
-            <div>
+            <div id="welcome-message">
                 <ul>
+                    <li>Over 20,000 users and 1,000 channels to explore</li>
                     <li>Create your own channels, with integrated wikis and blogs, for free</li>
                     <li>Lightweight, text focused and with accessibility built it</li>
                     <li>No advertising, ever</li>
@@ -98,8 +99,32 @@
             </div>
             
             <div class="modal-buttons">
-                <div class="modal-button primary">Signup</div>
+                <div class="modal-button primary" id="welcome-signup">Signup</div>
                 <div class="modal-button" id="welcome-continue">Continue as Guest</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="signup" style="display: none">
+        <div class="modal-content">
+            <div id="signup-title">New Account</div>
+            
+            <div id="signup-form">
+                <div><input type="text" placeholder="Username" id="signup-username"></div>
+                <div><input type="text" placeholder="Email Address" id="signup-email"></div>
+            </div>
+            
+            <div>
+                <ul>
+                    <li>You must use a valid email address</li>
+                    <li>We will send a link to your email address to confirm the account</li>
+                    <li>Your <strong>Username</strong> will expire if the link is not clicked within 30 minutes</li>
+                </ul>
+            </div>
+            
+            <div class="modal-buttons">
+                <div class="modal-button" id="signup-goback">Go Back</div>
+                <div class="modal-button primary" id="signup-submit">Signup</div>
             </div>
         </div>
     </div>

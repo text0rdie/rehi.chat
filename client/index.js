@@ -25,13 +25,14 @@ const ws = new WebSocket('wss://' + window.location.hostname + ':8080')
 ws.onmessage = function(message) {
     try {
         message = JSON.parse(message.data)
+        content = message.content
         
         switch (message.type) {
             case 'channel-message' :
-                channelMessage(message.content)
+                channelMessage(content)
                 break
             case 'channel-users' :
-                channelUsers(message.content)
+                channelUsers(content)
                 break
         }
     } catch (e) {
@@ -71,13 +72,39 @@ function channelUsers(users) {
     document.querySelector('#channel #users').innerHTML = userList.outerHTML
 }
 
+function createMessage(message, type) {
+    return JSON.stringify({
+        content: message,
+        type: type
+    })
+}
+
+document.querySelector('#welcome #welcome-signup').addEventListener('click', function(event) {
+    document.querySelector('#welcome').style.display = 'none'
+    document.querySelector('#signup').style.display = 'block'
+})
+
+document.querySelector('#signup #signup-submit').addEventListener('click', function(event) {
+    const account = {
+        username: document.querySelector('#signup #signup-username'),
+        email: document.querySelector('#signup #signup-email')
+    }
+    
+    ws.send(createMessage(account, 'account-create'))
+})
+
 document.querySelector('#welcome #welcome-continue').addEventListener('click', function(event) {
     document.querySelector('#welcome').style.display = 'none'
 })
 
+document.querySelector('#signup #signup-goback').addEventListener('click', function(event) {
+    document.querySelector('#signup').style.display = 'none'
+    document.querySelector('#welcome').style.display = 'block'
+})
+
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {
     if (event.keyCode == 13) {
-        ws.send(event.target.value)
+        ws.send(createMessage(event.target.value, 'channel-message'))
         
         event.target.select()
         event.preventDefault()

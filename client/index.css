@@ -32,6 +32,15 @@ textarea::-webkit-scrollbar-thumb {
     background-color: #FFFFFF;
 }
 
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    width: 200px;
+}
+
 a {
     color: #3399FF;
     padding-bottom: 2px;
@@ -212,9 +221,13 @@ a {
     justify-content: end;
 }
 
-#welcome #welcome-login input {
-    padding: 10px;
-    width: 200px;
+#welcome #welcome-login > div {
+    display: grid;
+    align-items: center;
+}
+
+#welcome #welcome-login > div > div {
+    padding-right: 15px;
 }
 
 #welcome #welcome-title {
@@ -226,4 +239,26 @@ a {
 #welcome ul {
     margin-top: 0px;
     margin-bottom: 20px;
+}
+
+#signup #signup-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+    grid-column-gap: 15px;
+    justify-content: end;
+}
+
+#signup #signup-email {
+    width: 300px;
+}
+
+#signup #signup-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #3399FF;
+}
+
+#signup ul > li:first-child {
+    color: #FF0000;
 }
