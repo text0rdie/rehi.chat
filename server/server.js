@@ -32,24 +32,47 @@ try {
     }
 } catch (error) {
     util.log('err', 'Unable to parse config.json', error)
-    
-    return
+    process.exit(1)
 }
 
 try {
+    if (!config.db.host) {
+        throw 'config.json is missing db.host'
+    }
+    
+    if (!config.db.user) {
+        throw 'config.json is missing db.user'
+    }
+    
+    if (!config.db.password) {
+        throw 'config.json is missing db.password'
+    }
+    
+    if (!config.db.database) {
+        throw 'config.json is missing db.database'
+    }
+    
     db = mysql.createConnection({
         host : config.db.host,
         user : config.db.user,
         password : config.db.password,
         database : config.db.database
     })
-    
-    db.connect()
 } catch (error) {
-    util.log('err', 'Unable to connect to the database', error)
-    
-    return
+    util.log('err', 'Unable to create database connection', error)
+    process.exit(1)
 }
+
+db.on('error', function(error) {
+    if (error.code === 'ECONNREFUSED') {
+        util.log('err', 'Unable to connect to the database', error)
+        process.exit(1)
+    } else {
+        util.log('err', 'MySQL Error', error)
+    }
+})
+
+db.connect()
 
 try {
     tlsPort = 8080
@@ -62,9 +85,12 @@ try {
     wssServer = new websocket.Server(tlsConfig)
 } catch (error) {
     util.log('err', 'Unable to start the web socket server', error)
-    
-    return
+    process.exit(1)
 }
+
+wssServer.on('error', function(error) {
+    util.log('err', 'WebSocket Error', error)
+})
 
 wssServer.on('listening', function(ws, request) {
     util.log('sys', 'Listening on *:' + tlsPort)
