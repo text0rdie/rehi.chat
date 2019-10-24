@@ -86,8 +86,8 @@ document.querySelector('#welcome #welcome-signup').addEventListener('click', fun
 
 document.querySelector('#signup #signup-submit').addEventListener('click', function(event) {
     const account = {
-        username: document.querySelector('#signup #signup-username'),
-        email: document.querySelector('#signup #signup-email')
+        username: document.querySelector('#signup #signup-username').value,
+        email: document.querySelector('#signup #signup-email').value
     }
     
     ws.send(createMessage(account, 'account-create'))
