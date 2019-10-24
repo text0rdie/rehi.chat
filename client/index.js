@@ -95,6 +95,7 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
 
 document.querySelector('#welcome #welcome-continue').addEventListener('click', function(event) {
     document.querySelector('#welcome').style.display = 'none'
+    document.querySelector('#chat textarea').focus()
 })
 
 document.querySelector('#signup #signup-goback').addEventListener('click', function(event) {
