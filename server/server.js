@@ -134,7 +134,7 @@ wssServer.on('connection', function(ws, request) {
                     channel.message(content, clientName)
                     break
                 case 'account-create' :
-                    account.create(content)
+                    account.create(content, msg.id, ws)
                     break
             }
         } catch (e) {

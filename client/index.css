@@ -259,6 +259,13 @@ a {
     color: #3399FF;
 }
 
-#signup ul > li:first-child {
+.danger {
     color: #FF0000;
+}
+
+.alert-success {
+    background-color: #323844;
+    margin-bottom: 20px;
+    line-height: 1.7;
+    padding: 15px;
 }

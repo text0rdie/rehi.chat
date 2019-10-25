@@ -1,8 +1,13 @@
 const util = require('./util.js')
+const message = require('./message.js')
 
 module.exports = {
-    create: function(account) {
-        util.log('dbg', 'account-create', account)
+    create: function(account, reid, ws) {
+        // TODO: add username validation and create the account
+        // var query = connection.query('INSERT INTO user SET ?', post, function (error, results, fields) {})
+        
+        const content = message.create(123, 'success', reid)
+        ws.send(content)
     },
     
     createGuest: function(clientId, ws) {
