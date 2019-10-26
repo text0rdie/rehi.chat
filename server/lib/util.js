@@ -7,13 +7,17 @@ for (let i = 0; i < 256; i++) {
 }
 
 module.exports = {
-    log: function(type, message, error) {
+    log: function(type, message, error, extra) {
         console.log('[' + type + '] ' + message)
         
         if (error) {
             if (global.debug || !error.message) {
                 error = error.message || JSON.stringify(error)
                 console.log('[dbg] ' + error)
+                
+                if (extra) {
+                    console.log('[dbg] ' + extra)
+                }
             }
         }
     },

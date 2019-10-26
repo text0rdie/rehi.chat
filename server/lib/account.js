@@ -3,11 +3,25 @@ const message = require('./message.js')
 
 module.exports = {
     create: function(account, reid, ws) {
-        // TODO: add username validation and create the account
-        // var query = connection.query('INSERT INTO user SET ?', post, function (error, results, fields) {})
+        // TODO: add username validation and create the login link
+        // NOTE: do we need to use a new type for invalid data (i.e. NOT error)
         
-        const content = message.create(123, 'success', reid)
-        ws.send(content)
+        global.db.query('INSERT INTO rehi_user SET ?', account, function (error, results, fields) {
+            let content
+            
+            if (error) {
+                // TODO: create a function for logging error codes
+                let errorCode = 'Error Code #' + util.UUID4()
+                
+                util.log('err', errorCode, error, error.sql)
+                
+                content = message.create(errorCode, 'error', reid)
+            } else {
+                content = message.create(results.insertId, 'success', reid)
+            }
+            
+            ws.send(content)
+        })
     },
     
     createGuest: function(clientId, ws) {

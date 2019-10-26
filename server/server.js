@@ -13,6 +13,7 @@ const account = require('./lib/account.js')
 global.debug = false
 global.users = []
 global.guest = 0
+global.db = null
 
 let config
 let db
@@ -52,7 +53,7 @@ try {
         throw 'config.json is missing db.database'
     }
     
-    db = mysql.createConnection({
+    global.db = mysql.createConnection({
         host : config.db.host,
         user : config.db.user,
         password : config.db.password,
@@ -63,7 +64,7 @@ try {
     process.exit(1)
 }
 
-db.on('error', function(error) {
+global.db.on('error', function(error) {
     if (error.code === 'ECONNREFUSED') {
         util.log('err', 'Unable to connect to the database', error)
         process.exit(1)
@@ -72,7 +73,7 @@ db.on('error', function(error) {
     }
 })
 
-db.connect()
+global.db.connect()
 
 try {
     tlsPort = 8080
@@ -143,5 +144,8 @@ wssServer.on('connection', function(ws, request) {
     })
 })
 
+tlsServer.on('close', function() {
+    global.db.end()
+})
+
 tlsServer.listen(tlsPort)
-db.end()

@@ -263,6 +263,11 @@ a {
     color: #FF0000;
 }
 
+.alert-error {
+    margin-top: 20px;
+}
+
+.alert-error,
 .alert-success {
     background-color: #323844;
     margin-bottom: 20px;

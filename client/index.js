@@ -142,7 +142,12 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
     }
     
     ws.send(createMessage(account, 'account-create', function(message) {
-        if (message.type === 'success') {
+        if (message.type === 'error') {
+            let error = '<span class="danger">There was an error processing your request. Please try again.</span>'
+            error += '<br>' + message.content
+            
+            messageHTML = '<div class="alert-error">' + error + '</div>'
+        } else {
             document.querySelector('#signup #signup-form').style.display = 'none'
             document.querySelector('#signup #signup-submit').style.display = 'none'
             document.querySelector('#signup #signup-goback').style.display = 'none'
@@ -152,8 +157,6 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
             messageHTML += 'We have sent an account confirmation link to <strong>' + account.email + '</strong><br>'
             messageHTML += 'Please click the link within <em>30 minutes</em> to complete registration and login.'
             messageHTML += '</div>'
-        } else {
-            messageHTML = '<div class="alert-error">' + message.content + '</div>'
         }
         
         document.querySelector('#signup #signup-message').innerHTML = messageHTML
