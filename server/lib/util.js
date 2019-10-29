@@ -12,7 +12,14 @@ module.exports = {
         
         if (error) {
             if (global.debug || !error.message) {
-                error = error.message || JSON.stringify(error)
+                if (error.message) {
+                    error = error.message
+                } else {
+                    if (typeof error === 'object') {
+                        error = JSON.stringify(error)
+                    }
+                }
+                
                 console.log('[dbg] ' + error)
                 
                 if (extra) {

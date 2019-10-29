@@ -10,7 +10,10 @@ const message = require('./lib/message.js')
 const channel = require('./lib/channel.js')
 const account = require('./lib/account.js')
 
+global.sendgrid = require('@sendgrid/mail')
+
 global.debug = false
+global.email = {}
 global.users = []
 global.guest = 0
 global.db = null
@@ -31,6 +34,40 @@ try {
     if (typeof config.debug === 'boolean') {
         global.debug = config.debug
     }
+    
+    if (!config.jwt) {
+        throw 'config.json is missing the JSON Web Token settings (jwt)'
+    } else {
+        if (!config.jwt.secret) {
+            throw 'config.json is missing the JWT secret (jwt.secret)'
+        }
+        
+        if (!config.jwt.expiry) {
+            throw 'config.json is missing the JWT expiry (jwt.expiry)'
+        }
+        
+        global.jwt = config.jwt
+    }
+    
+    if (!config.api) {
+        throw 'config.json is missing the API settings (api)'
+    } else {
+        if (!config.api.sendgrid) {
+            throw 'config.json is missing the API key for SendGrid (api.sendgrid)'
+        } else {
+            global.sendgrid.setApiKey(config.api.sendgrid)
+        }
+    }
+    
+    if (!config.email) {
+        throw 'config.json is missing the email settings (email)'
+    } else {
+        if (!config.email.from) {
+            throw 'config.json is missing the From email (email.from)'
+        }
+        
+        global.email = config.email
+    }
 } catch (error) {
     util.log('err', 'Unable to parse config.json', error)
     process.exit(1)
@@ -38,19 +75,19 @@ try {
 
 try {
     if (!config.db.host) {
-        throw 'config.json is missing db.host'
+        throw 'config.json is missing the database host (db.host)'
     }
     
     if (!config.db.user) {
-        throw 'config.json is missing db.user'
+        throw 'config.json is missing the database user (db.user)'
     }
     
     if (!config.db.password) {
-        throw 'config.json is missing db.password'
+        throw 'config.json is missing the database user\'s password (db.password)'
     }
     
     if (!config.db.database) {
-        throw 'config.json is missing db.database'
+        throw 'config.json is missing the database name (db.database)'
     }
     
     global.db = mysql.createConnection({

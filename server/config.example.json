@@ -5,5 +5,15 @@
         "user": "",
         "password": "",
         "database": "rehi"
+    },
+    "jwt": {
+        "secret": "",
+        "expiry": 1209600
+    },
+    "api": {
+        "sendgrid": ""
+    },
+    "email": {
+        "from": ""
     }
 }

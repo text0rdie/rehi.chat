@@ -8,6 +8,7 @@
         "start": "node server.js"
     },
     "dependencies": {
+        "@sendgrid/mail": "^6.4.0",
         "mysql": "^2.17.1",
         "ws": "^7.1.2"
     }
