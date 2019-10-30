@@ -1,53 +1,3 @@
-html {
-    font-family: sans-serif;
-    font-size: 16px;
-}
-
-body {
-    margin: 0px;
-    padding: 0px;
-}
-
-ul {
-    padding-left: 30px;
-    line-height: 1.7;
-}
-
-textarea {
-    width: 100%;
-    background-color: #18181F;
-    border: 1px solid #3399FF;
-    color: #FFFFFF;
-    padding: 5px;
-    height: 30px;
-    scrollbar-width: thin;
-    scrollbar-color: #FFFFFF #323844;
-}
-
-textarea::-webkit-scrollbar {
-    width: 7px;
-}
-
-textarea::-webkit-scrollbar-thumb {
-    background-color: #FFFFFF;
-}
-
-input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-input[type="text"] {
-    padding: 10px;
-    width: 200px;
-}
-
-a {
-    color: #3399FF;
-    padding-bottom: 2px;
-    text-decoration: none;
-    border-bottom: 2px solid #3399FF;
-}
-
 #main {
     display: grid;
     grid-template-columns: 25% 50% 25%;
@@ -55,6 +5,8 @@ a {
     color: #FFFFFF;
     height: 100vh;
 }
+
+/* Column 1 */
 
 #server {
     display: grid;
@@ -79,35 +31,7 @@ a {
     grid-row-gap: 15px;
 }
 
-.tabs {
-    display: grid;
-    grid-template-rows: 30px auto;
-    grid-row-gap: 15px;
-}
-
-.tabs > .head {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(25px, max-content));
-    grid-column-gap: 25px;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-.tabs > .head > div {
-    padding: 0px 10px;
-    height: 25px;
-    cursor: pointer;
-}
-
-.tabs > .head > div:hover,
-.tabs > .head > div.active {
-    border-bottom: 2px solid #3399FF;
-}
-
-.tabs > .body {
-    background-color: #323844;
-    font-size: 0.9rem;
-}
+/* Column 2 */
 
 #chat {
     background-color: #323844;
@@ -156,6 +80,8 @@ a {
     width: calc(100% - 12px);
 }
 
+/* Column 3 */
+
 #channel {
     display: grid;
     grid-template-rows: 100%;
@@ -170,49 +96,44 @@ a {
     grid-template-rows: 100%;
 }
 
+/* Tabs */
+
+.tabs {
+    display: grid;
+    grid-template-rows: 30px auto;
+    grid-row-gap: 15px;
+}
+
+.tabs > .head {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25px, max-content));
+    grid-column-gap: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.tabs > .head > div {
+    padding: 0px 10px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.tabs > .head > div:hover,
+.tabs > .head > div.active {
+    border-bottom: 2px solid #3399FF;
+}
+
+.tabs > .body {
+    background-color: #323844;
+    font-size: 0.9rem;
+}
+
 .highlight-says {
     display: block;
     margin-bottom: 10px;
 }
 
-.modal {
-    background-color: rgba(24, 24, 31, 0.5);
-    left: 0px; top: 0px;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.modal-content {
-    display: grid;
-    grid-template-rows: auto;
-    grid-row-gap: 15px;
-    background-color: #18181F;
-    border: 1px solid #3399FF;
-    margin: 60px auto;
-    padding: 20px;
-    width: 600px;
-    color: #FFFFFF;
-}
-
-.modal-content > .modal-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
-    grid-column-gap: 15px;
-    justify-content: end;
-}
-
-.modal-button {
-    background-color: #323844;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.modal-button.primary {
-    background-color: #3399FF;
-    color: #18181F;
-}
+/* Modals */
 
 #welcome #welcome-login {
     display: grid;
@@ -257,20 +178,4 @@ a {
     font-weight: bold;
     margin-bottom: 20px;
     color: #3399FF;
-}
-
-.danger {
-    color: #FF0000;
-}
-
-.alert-error {
-    margin-top: 20px;
-}
-
-.alert-error,
-.alert-success {
-    background-color: #323844;
-    margin-bottom: 20px;
-    line-height: 1.7;
-    padding: 15px;
 }
