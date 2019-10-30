@@ -1,0 +1,10 @@
+#main {
+    display: grid;
+    background-color: #18181F;
+    color: #FFFFFF;
+    height: 100vh;
+}
+
+#login {
+    place-self: center;
+}
