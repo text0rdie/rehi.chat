@@ -1,7 +1,9 @@
 const crypto = require('crypto')
 
 const util = require('./util.js')
+const send = require('./send.js')
 const message = require('./message.js')
+const channel = require('./channel.js')
 
 module.exports = {
     create: function(account, reid, ws) {
@@ -49,11 +51,34 @@ module.exports = {
         global.users[clientId] = {
             client: ws,
             clientId: clientId,
-            name: 'Guest' + global.guest
+            name: 'Guest' + global.guest,
+            isGuest: true
         }
         
         if (global.guest > 9999) {
             global.guest = 0
         }
+    },
+    
+    login: function(key, reid, ws) {
+        console.log('login key = ' + key)
+        console.log('reid = ' + reid)
+    },
+    
+    connect: function(user) {
+        util.log('sys', user.name + ' has connected')
+        send.all(message.highlight(user.name, 'name') + ' has connected', 'channel-message', user.client)
+        
+        channel.users(user.client)
+        
+        let welcome = ''
+        
+        if (user.isGuest) {
+            welcome = 'Welcome! Your name has been auto-generated as ' + message.highlight(user.name, 'name')
+        } else {
+            welcome = 'Welcome! You are logged in as ' + message.highlight(user.name, 'name')
+        }
+        
+        user.client.send(message.create(welcome, 'channel-message'))
     }
 }

@@ -1,5 +1,9 @@
 import * as client from './lib/client.js'
 
+client.ws.onopen = function(event) {
+    client.ws.send(client.createMessage('', 'account-connect'))
+}
+
 const tabHeads = document.querySelectorAll('.tabs > .head > div')
 
 for (const th of tabHeads) {

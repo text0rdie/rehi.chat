@@ -136,28 +136,18 @@ wssServer.on('listening', function(ws, request) {
 
 wssServer.on('connection', function(ws, request) {
     const clientId = request.headers['sec-websocket-key']
-    let clientName = 'Ghost'
     
     if (users.hasOwnProperty(clientId) === false) {
         account.createGuest(clientId, ws)
     }
     
-    clientName = users[clientId].name
-    
-    util.log('sys', clientName + ' has connected')
-    send.all(message.highlight(clientName, 'name') + ' has connected', 'channel-message', ws)
-    
-    send.users(ws)
-    
-    const welcome = 'Welcome! Your name has been auto-generated as ' + message.highlight(clientName, 'name')
-    const content = message.create(welcome, 'channel-message')
-    ws.send(content)
-    
     ws.on('close', function() {
+        const clientName = users[clientId].name
+        
         util.log('sys', clientName + ' has disconnected')
         send.all(message.highlight(clientName, 'name') + ' has disconnected', 'channel-message', ws)
         
-        send.users(ws)
+        channel.users(ws)
     })
     
     ws.on('message', function(msg) {
@@ -165,15 +155,27 @@ wssServer.on('connection', function(ws, request) {
         
         try {
             msg = JSON.parse(msg)
-            const content = msg.content
             
-            switch (msg.type) {
-                case 'channel-message' :
-                    channel.message(content, clientName)
-                    break
-                case 'account-create' :
-                    account.create(content, msg.id, ws)
-                    break
+            try {
+                const content = msg.content
+                const user = users[clientId]
+                
+                switch (msg.type) {
+                    case 'channel-message' :
+                        channel.message(content, user)
+                        break
+                    case 'account-create'  :
+                        account.create(content, msg.id, ws)
+                        break
+                    case 'account-login'   :
+                        account.login(content, msg.id, ws)
+                        break
+                    case 'account-connect' :
+                        account.connect(user)
+                        break
+                }
+            } catch (e) {
+                util.log('err', 'Unable to run command', e)
             }
         } catch (e) {
             util.log('err', 'Unable to parse message', e)

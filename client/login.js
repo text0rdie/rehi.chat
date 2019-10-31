@@ -1,3 +1,6 @@
+import * as util from './lib/util.js'
 import * as client from './lib/client.js'
 
-// TODO: get the "key" and send a login command to the server
+client.ws.onopen = function(event) {
+    client.ws.send(client.createMessage(util.queryString['key'], 'account-login'))
+}
