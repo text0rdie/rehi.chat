@@ -14,8 +14,11 @@ global.sendgrid = require('@sendgrid/mail')
 
 global.debug = false
 global.email = {}
+global.jwt = {}
+
 global.users = []
 global.guest = 0
+
 global.db = null
 
 let config
@@ -39,14 +42,21 @@ try {
         throw 'config.json is missing the JSON Web Token settings (jwt)'
     } else {
         if (!config.jwt.secret) {
-            throw 'config.json is missing the JWT secret (jwt.secret)'
+            throw 'config.json is missing the JWT secret key (jwt.secret)'
         }
         
-        if (!config.jwt.expiry) {
-            throw 'config.json is missing the JWT expiry (jwt.expiry)'
+        if (!config.jwt.expiresIn) {
+            throw 'config.json is missing the JWT expiration (jwt.expiresIn)'
+        }
+        
+        if (!config.jwt.recheckIn) {
+            throw 'config.json is missing the JWT refresh interval (jwt.recheckIn)'
         }
         
         global.jwt = config.jwt
+        
+        global.jwt.expiresIn = parseInt(global.jwt.expiresIn, 10) || 0
+        global.jwt.recheckIn = parseInt(global.jwt.recheckIn, 10) || 0
     }
     
     if (!config.api) {
@@ -152,6 +162,7 @@ wssServer.on('connection', function(ws, request) {
     
     ws.on('message', function(msg) {
         // TODO: validate token
+        // TODO: validate chk in token and re-issue
         
         try {
             msg = JSON.parse(msg)

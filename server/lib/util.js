@@ -2,7 +2,9 @@ const crypto = require('crypto')
 
 module.exports = {
     log: function(type, message, error, extra) {
-        console.log('[' + type + '] ' + message)
+        const date = new Date().toString().substr(0, 24) + ' '
+        
+        console.log(date + '[' + type + '] ' + message)
         
         if (error) {
             if (global.debug || !error.message) {
@@ -16,15 +18,23 @@ module.exports = {
                     }
                 }
                 
-                console.log('[dbg] ' + debug)
+                console.log(date + '[dbg] ' + debug)
                 
                 if (extra) {
-                    console.log('[dbg] ' + extra)
+                    console.log(date + '[dbg] ' + extra)
                 } else if (error.stack) {
-                    console.log('[dbg] ' + error.stack.split('\n')[1].trim())
+                    console.log(date + '[dbg] ' + error.stack.split('\n')[1].trim())
                 }
             }
         }
+    },
+    
+    logError: function(error, extra) {
+        let errorCode = 'Error Code #' + this.UUID4()
+        
+        this.log('err', errorCode, error, extra)
+        
+        return errorCode
     },
     
     // https://gist.github.com/jed/982883

@@ -40,7 +40,7 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
         let messageHTML = ''
         
         if (message.type === 'error') {
-            let error = '<span class="danger">There was an error processing your request. Please try again.</span>'
+            let error = '<strong>There was an error processing your request. Please try again.</strong>'
             error += '<br>' + message.content
             
             messageHTML = '<div class="alert-error">' + error + '</div>'

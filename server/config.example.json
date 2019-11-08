@@ -8,7 +8,8 @@
     },
     "jwt": {
         "secret": "",
-        "expiry": 1209600
+        "expiresIn": "1209600‬",
+        "recheckIn": "600"
     },
     "api": {
         "sendgrid": ""

@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
 
 const util = require('./util.js')
 const send = require('./send.js')
@@ -17,11 +18,7 @@ module.exports = {
             let content
             
             if (error) {
-                // TODO: create a function for logging error codes
-                let errorCode = 'Error Code #' + util.UUID4()
-                
-                util.log('err', errorCode, error, error.sql)
-                
+                const errorCode = util.logError(error, error.sql)
                 content = message.create(errorCode, 'error', reid)
             } else {
                 let link = 'https://rehi.chat/login.html?key=' + encodeURIComponent(account.login)
@@ -61,8 +58,44 @@ module.exports = {
     },
     
     login: function(key, reid, ws) {
-        console.log('login key = ' + key)
-        console.log('reid = ' + reid)
+        let query = 'SELECT * FROM rehi_user WHERE login = ? AND (login_created + (30 * 60)) >= UNIX_TIMESTAMP()'
+        
+        global.db.query(query, key, function (error, results, fields) {
+            let content
+            
+            if (error) {
+                const errorCode = util.logError(error, error.sql)
+                content = message.create(errorCode, 'error', reid)
+            } else {
+                if (results.length == 1) {
+                    const uid = results[0].id
+                    const jti = util.UUID4()
+                    
+                    query = 'UPDATE rehi_user SET confirmed = 1, token = ?, login = "", login_created = 0 WHERE id = ?'
+                    
+                    global.db.query(query, [jti, uid], function (error, results, fields) {
+                        if (error) {
+                            const errorCode = util.logError(error, error.sql)
+                            content = message.create(errorCode, 'error', reid)
+                        } else {
+                            const token = jwt.sign({
+                                uid: uid,
+                                chk: Math.floor(Date.now() / 1000) + global.jwt.recheckIn,
+                                exp: Math.floor(Date.now() / 1000) + global.jwt.expiresIn,
+                                jti: jti
+                            }, global.jwt.secret)
+                            
+                            content = message.create(token, 'success', reid)
+                        }
+                    })
+                } else {
+                    const errorCode = util.logError('Unable to login with the following key', key)
+                    content = message.create(errorCode, 'error', reid)
+                }    
+            }
+            
+            ws.send(content)
+        })
     },
     
     connect: function(user) {
