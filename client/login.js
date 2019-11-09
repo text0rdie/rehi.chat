@@ -11,12 +11,11 @@ client.ws.onopen = function(event) {
                 error += '<br>' + message.content
                 
                 messageHTML = '<div class="alert-error">' + error + '</div>'
+                document.querySelector('#login').innerHTML = messageHTML
             } else {
                 localStorage.setItem('jwt', message.content)
-                // TODO: redirect to index.html and authenticate with JWT
+                window.location.href = '/'
             }
-            
-            document.querySelector('#login').innerHTML = messageHTML
         }))
     }, 3000)
 }

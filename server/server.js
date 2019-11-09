@@ -13,6 +13,7 @@ const account = require('./lib/account.js')
 global.sendgrid = require('@sendgrid/mail')
 
 global.debug = false
+global.paths = {}
 global.email = {}
 global.jwt = {}
 
@@ -36,6 +37,16 @@ try {
     
     if (typeof config.debug === 'boolean') {
         global.debug = config.debug
+    }
+    
+    if (!config.paths) {
+        throw 'config.json is missing the server paths (paths)'
+    } else {
+        if (!config.paths.siteurl) {
+            throw 'config.json is missing the Site URL (paths.siteurl)'
+        }
+        
+        global.paths = config.paths
     }
     
     if (!config.jwt) {
@@ -161,11 +172,12 @@ wssServer.on('connection', function(ws, request) {
     })
     
     ws.on('message', function(msg) {
-        // TODO: validate token
-        // TODO: validate chk in token and re-issue
-        
         try {
             msg = JSON.parse(msg)
+            
+            // TODO: validate token
+            // TODO: validate chk in token and re-issue
+            util.log('sys', 'Received JWT', msg.jwt, clientId)
             
             try {
                 const content = msg.content
@@ -179,7 +191,7 @@ wssServer.on('connection', function(ws, request) {
                         account.create(content, msg.id, ws)
                         break
                     case 'account-login'   :
-                        account.login(content, msg.id, ws)
+                        account.login(content, msg.id, ws, clientId)
                         break
                     case 'account-connect' :
                         account.connect(user)

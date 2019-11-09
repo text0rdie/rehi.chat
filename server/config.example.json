@@ -1,5 +1,8 @@
 {
     "debug": true,
+    "paths": {
+        "siteurl": "https://localhost"
+    },
     "db": {
         "host": "localhost",
         "user": "",

@@ -39,7 +39,8 @@ function createMessage(message, type, callback) {
     return JSON.stringify({
         id: id,
         content: message,
-        type: type
+        type: type,
+        jwt: localStorage.getItem('jwt')
     })
 }
 

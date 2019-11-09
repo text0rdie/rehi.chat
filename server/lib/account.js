@@ -15,16 +15,17 @@ module.exports = {
         account.login_created = Math.floor(Date.now() / 1000)
         
         global.db.query('INSERT INTO rehi_user SET ?', account, function (error, results, fields) {
-            let content
+            let content = '{}'
             
             if (error) {
                 const errorCode = util.logError(error, error.sql)
                 content = message.create(errorCode, 'error', reid)
             } else {
-                let link = 'https://rehi.chat/login.html?key=' + encodeURIComponent(account.login)
+                let link = global.paths.siteurl + '/login.html?key=' + encodeURIComponent(account.login)
                 let body = '<p><strong>Hi ' + account.username + '&nbsp;&nbsp;:-)</strong></p>'
-                body += '<p>Thanks for signing up! Please click the following link to login to your new account.</p>'
-                body += '<p><a href="' + link + '">Login @ Rehi</a></p>'
+                body += '<p>Thanks for signing up!</p>'
+                body += '<p>Please click the following link to login to your new account.</p>'
+                body += '<p><a href="' + link + '">Login to Rehi</a></p>'
                 
                 const email = {
                     to: account.email,
@@ -57,11 +58,11 @@ module.exports = {
         }
     },
     
-    login: function(key, reid, ws) {
+    login: function(key, reid, ws, clientId) {
         let query = 'SELECT * FROM rehi_user WHERE login = ? AND (login_created + (30 * 60)) >= UNIX_TIMESTAMP()'
         
         global.db.query(query, key, function (error, results, fields) {
-            let content
+            let content = '{}'
             
             if (error) {
                 const errorCode = util.logError(error, error.sql)
@@ -69,6 +70,7 @@ module.exports = {
             } else {
                 if (results.length == 1) {
                     const uid = results[0].id
+                    const username = results[0].username
                     const jti = util.UUID4()
                     
                     query = 'UPDATE rehi_user SET confirmed = 1, token = ?, login = "", login_created = 0 WHERE id = ?'
@@ -86,8 +88,23 @@ module.exports = {
                             }, global.jwt.secret)
                             
                             content = message.create(token, 'success', reid)
+                            
+                            // TODO: register the user so that the redirect will log them in
+                            // NOTE: the clientId changes and so we need to use something else
+                            util.log('sys', 'Registering Client ID', clientId)
+                            
+                            global.users[clientId] = {
+                                client: ws,
+                                clientId: clientId,
+                                name: username,
+                                isGuest: false
+                            }
                         }
+                        
+                        ws.send(content)
                     })
+                    
+                    return
                 } else {
                     const errorCode = util.logError('Unable to login with the following key', key)
                     content = message.create(errorCode, 'error', reid)
