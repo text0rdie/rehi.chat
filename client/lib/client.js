@@ -1,5 +1,6 @@
 import * as util from './util.js'
 import * as channel from './channel.js'
+import * as account from './account.js'
 
 let callbacks = []
 
@@ -16,6 +17,9 @@ ws.onmessage = function(message) {
             delete callbacks[message.reid]
         } else {
             switch (message.type) {
+                case 'account-connect' :
+                    account.connect(content)
+                    break
                 case 'channel-message' :
                     channel.message(content)
                     break

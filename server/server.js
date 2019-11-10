@@ -3,6 +3,7 @@ const path = require('path')
 const https = require('https')
 const mysql = require('mysql')
 const websocket = require('ws')
+const jwt = require('jsonwebtoken')
 
 const util = require('./lib/util.js')
 const send = require('./lib/send.js')
@@ -158,7 +159,7 @@ wssServer.on('listening', function(ws, request) {
 wssServer.on('connection', function(ws, request) {
     const clientId = request.headers['sec-websocket-key']
     
-    if (users.hasOwnProperty(clientId) === false) {
+    if (global.users.hasOwnProperty(clientId) === false) {
         account.createGuest(clientId, ws)
     }
     
@@ -175,31 +176,47 @@ wssServer.on('connection', function(ws, request) {
         try {
             msg = JSON.parse(msg)
             
-            // TODO: validate token
-            // TODO: validate chk in token and re-issue
-            util.log('sys', 'Received JWT', msg.jwt, clientId)
-            
-            try {
-                const content = msg.content
-                const user = users[clientId]
+            jwt.verify(msg.jwt, global.jwt.secret, function(error, token) {
+                let user = global.users[clientId]
                 
-                switch (msg.type) {
-                    case 'channel-message' :
-                        channel.message(content, user)
-                        break
-                    case 'account-create'  :
-                        account.create(content, msg.id, ws)
-                        break
-                    case 'account-login'   :
-                        account.login(content, msg.id, ws, clientId)
-                        break
-                    case 'account-connect' :
-                        account.connect(user)
-                        break
+                if (error && user.isGuest === false) {
+                    util.log('err', 'Invalid JSON Web Token', error, msg.jwt)
+                } else {
+                    // TODO: verify the recheck time
+                    
+                    if (error === null) {
+                        global.users[clientId] = {
+                            client: ws,
+                            clientId: clientId,
+                            name: token.username,
+                            isGuest: false
+                        }
+                        
+                        user = global.users[clientId]
+                    }
+                    
+                    try {
+                        const content = msg.content
+                        
+                        switch (msg.type) {
+                            case 'account-create'  :
+                                account.create(content, msg.id, ws)
+                                break
+                            case 'account-login'   :
+                                account.login(content, msg.id, ws, clientId)
+                                break
+                            case 'account-connect' :
+                                account.connect(user)
+                                break
+                            case 'channel-message' :
+                                channel.message(content, user)
+                                break
+                        }
+                    } catch (e) {
+                        util.log('err', 'Unable to run command', e)
+                    }
                 }
-            } catch (e) {
-                util.log('err', 'Unable to run command', e)
-            }
+            })
         } catch (e) {
             util.log('err', 'Unable to parse message', e)
         }

@@ -28,6 +28,7 @@ for (const th of tabHeads) {
 document.querySelector('#welcome #welcome-signup').addEventListener('click', function(event) {
     document.querySelector('#welcome').style.display = 'none'
     document.querySelector('#signup').style.display = 'block'
+    document.querySelector('#signup #signup-username').focus()
 })
 
 document.querySelector('#signup #signup-submit').addEventListener('click', function(event) {
@@ -73,6 +74,7 @@ document.querySelector('#welcome #welcome-continue').addEventListener('click', f
 document.querySelector('#signup #signup-goback').addEventListener('click', function(event) {
     document.querySelector('#signup').style.display = 'none'
     document.querySelector('#welcome').style.display = 'block'
+    document.querySelector('#welcome #welcome-username').focus()
 })
 
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {

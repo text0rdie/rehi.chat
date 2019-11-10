@@ -82,23 +82,13 @@ module.exports = {
                         } else {
                             const token = jwt.sign({
                                 uid: uid,
+                                username: username,
                                 chk: Math.floor(Date.now() / 1000) + global.jwt.recheckIn,
                                 exp: Math.floor(Date.now() / 1000) + global.jwt.expiresIn,
                                 jti: jti
                             }, global.jwt.secret)
                             
                             content = message.create(token, 'success', reid)
-                            
-                            // TODO: register the user so that the redirect will log them in
-                            // NOTE: the clientId changes and so we need to use something else
-                            util.log('sys', 'Registering Client ID', clientId)
-                            
-                            global.users[clientId] = {
-                                client: ws,
-                                clientId: clientId,
-                                name: username,
-                                isGuest: false
-                            }
                         }
                         
                         ws.send(content)
@@ -129,6 +119,7 @@ module.exports = {
             welcome = 'Welcome! You are logged in as ' + message.highlight(user.name, 'name')
         }
         
+        user.client.send(message.create(user, 'account-connect'))
         user.client.send(message.create(welcome, 'channel-message'))
     }
 }
