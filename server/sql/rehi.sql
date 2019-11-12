@@ -17,7 +17,8 @@ CREATE TABLE `rehi_user` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `login` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `login_created` int(10) UNSIGNED NOT NULL DEFAULT '0'
+  `login_created` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `login_remember` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
