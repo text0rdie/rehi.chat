@@ -91,22 +91,22 @@ a {
 
 /* Text Highlights */
 
-.danger {
+.important {
     color: #FF0000;
 }
 
 /* Alerts */
 
-.alert-error {
-    margin-top: 20px;
-}
-
-.alert-error,
-.alert-success {
+.alert-success,
+.alert-invalid,
+.alert-unknown {
     background-color: #323844;
-    margin-bottom: 20px;
     line-height: 1.7;
     padding: 15px;
+}
+
+.alert-invalid {
+    background-color: #FF0000;
 }
 
 /* Spinners */

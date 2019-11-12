@@ -40,21 +40,28 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
     client.ws.send(client.createMessage(account, 'account-create', function(message) {
         let messageHTML = ''
         
-        if (message.type === 'error') {
-            let error = '<strong>There was an error processing your request. Please try again.</strong>'
-            error += '<br>' + message.content
-            
-            messageHTML = '<div class="alert-error">' + error + '</div>'
-        } else {
-            document.querySelector('#signup #signup-form').style.display = 'none'
-            document.querySelector('#signup #signup-submit').style.display = 'none'
-            document.querySelector('#signup #signup-goback').style.display = 'none'
-            document.querySelector('#signup #signup-close').style.display = 'block'
-            
-            messageHTML  = '<div class="alert-success">'
-            messageHTML += 'We have sent an account confirmation link to <strong>' + account.email + '</strong><br>'
-            messageHTML += 'Please click the link within <em>30 minutes</em> to complete registration and login.'
-            messageHTML += '</div>'
+        switch (message.type) {
+            case 'success' :
+                document.querySelector('#signup #signup-form').style.display = 'none'
+                document.querySelector('#signup #signup-submit').style.display = 'none'
+                document.querySelector('#signup #signup-goback').style.display = 'none'
+                document.querySelector('#signup #signup-close').style.display = 'block'
+                
+                messageHTML  = '<div class="alert-success">'
+                messageHTML += 'We have sent an account confirmation link to <strong>' + account.email + '</strong><br>'
+                messageHTML += 'Please click the link within <em>30 minutes</em> to complete registration and login.'
+                messageHTML += '</div>'
+                
+                break
+            case 'invalid' :
+                messageHTML = '<div class="alert-invalid">' + message.content + '</div>'
+                
+                break
+            default :
+                let error = '<strong>There was an error processing your request. Please try again.</strong>'
+                error += '<br>' + message.content
+                
+                messageHTML = '<div class="alert-unknown">' + error + '</div>'
         }
         
         document.querySelector('#signup #signup-message').innerHTML = messageHTML

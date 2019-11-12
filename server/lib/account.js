@@ -7,40 +7,80 @@ const message = require('./message.js')
 const channel = require('./channel.js')
 
 module.exports = {
-    create: function(account, reid, ws) {
-        // TODO: add username validation
-        // NOTE: do we need to use a new type for invalid data (i.e. NOT error)
+    create: function(account, reid, ws, deleted = false) {
+        const notAvailable = ['admin', 'moderator', 'guest', 'rehi']
+        let invalid = ''
         
-        account.login = crypto.randomBytes(64).toString('base64')
-        account.login_created = Math.floor(Date.now() / 1000)
+        if (account.username.length < 2 || account.username.length > 15) {
+            invalid = 'Your username must be between 2 - 15 characters.'
+        } else if (/[^A-Za-z0-9\!\@\#\$\%\^\&\*\(\)\[\]\{\}\-\+\=\|\'\:\.\;\~\`\?]/.test(account.username)) {
+            invalid = 'Your username has invalid characters.'
+        } else if (notAvailable.some(function(b) { return account.username.toLowerCase().indexOf(b) >= 0 })) {
+            invalid = 'This username is not available.'
+        }
         
-        global.db.query('INSERT INTO rehi_user SET ?', account, function (error, results, fields) {
-            let content = '{}'
-            
-            if (error) {
-                const errorCode = util.logError(error, error.sql)
-                content = message.create(errorCode, 'error', reid)
-            } else {
-                let link = global.paths.siteurl + '/login.html?key=' + encodeURIComponent(account.login)
-                let body = '<p><strong>Hi ' + account.username + '&nbsp;&nbsp;:-)</strong></p>'
-                body += '<p>Thanks for signing up!</p>'
-                body += '<p>Please click the following link to login to your new account.</p>'
-                body += '<p><a href="' + link + '">Login to Rehi</a></p>'
-                
-                const email = {
-                    to: account.email,
-                    from: global.email.from,
-                    subject: 'Rehi New Account',
-                    html: body,
+        if (invalid !== '') {
+            ws.send(message.create(invalid, 'invalid', reid))
+        } else {
+            let query = 'SELECT * FROM rehi_user WHERE username = ?'
+        
+            global.db.query(query, account.username, function (error, results, fields) {
+                if (error) {
+                    const errorCode = util.logError(error, error.sql)
+                    ws.send(message.create(errorCode, 'error', reid))
+                } else if (results.length > 0) {
+                    const loginExpired = parseInt(results[0].login_created) + (30 * 60)
+                    const nowTimestamp = Math.floor(Date.now() / 1000)
+                    
+                    if (results[0].confirmed === 1 || loginExpired > nowTimestamp || deleted) {
+                        invalid = 'This username is not available.'
+                        ws.send(message.create(invalid, 'invalid', reid))
+                    } else {
+                        let query = 'DELETE FROM rehi_user WHERE id = ?'
+                        
+                        global.db.query(query, results[0].id, function (error, results, fields) {
+                            if (error) {
+                                const errorCode = util.logError(error, error.sql)
+                                ws.send(message.create(errorCode, 'error', reid))
+                            } else {
+                                this.create(account, reid, ws, true)
+                            }
+                        })
+                    }
+                } else {
+                    account.login = crypto.randomBytes(64).toString('base64')
+                    account.login_created = Math.floor(Date.now() / 1000)
+                    
+                    global.db.query('INSERT INTO rehi_user SET ?', account, function (error, results, fields) {
+                        let content = '{}'
+                        
+                        if (error) {
+                            const errorCode = util.logError(error, error.sql)
+                            content = message.create(errorCode, 'error', reid)
+                        } else {
+                            let link = global.paths.siteurl + '/login.html?key=' + encodeURIComponent(account.login)
+                            let body = '<p><strong>Hi ' + account.username + '&nbsp;&nbsp;:-)</strong></p>'
+                            body += '<p>Thanks for signing up!</p>'
+                            body += '<p>Please click the following link to login to your new account.</p>'
+                            body += '<p><a href="' + link + '">Login to Rehi</a></p>'
+                            
+                            const email = {
+                                to: account.email,
+                                from: global.email.from,
+                                subject: 'Rehi New Account',
+                                html: body,
+                            }
+                            
+                            global.sendgrid.send(email)
+                            
+                            content = message.create(results.insertId, 'success', reid)
+                        }
+                        
+                        ws.send(content)
+                    })
                 }
-                
-                global.sendgrid.send(email)
-                
-                content = message.create(results.insertId, 'success', reid)
-            }
-            
-            ws.send(content)
-        })
+            })
+        }
     },
     
     createGuest: function(clientId, ws) {
