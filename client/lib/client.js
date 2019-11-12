@@ -44,7 +44,7 @@ function createMessage(message, type, callback) {
         id: id,
         content: message,
         type: type,
-        jwt: localStorage.getItem('jwt')
+        jwt: sessionStorage.getItem('jwt') || localStorage.getItem('jwt')
     })
 }
 

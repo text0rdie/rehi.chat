@@ -8,20 +8,50 @@ client.ws.onopen = function(event) {
                 let error = '<strong>This login link has expired. Please login again.</strong>'
                 error += '<br>' + message.content
                 
-                let messageHTML = '<div class="alert-error">' + error + '</div>'
+                let messageHTML = '<div class="alert-unknown">' + error + '</div>'
                 document.querySelector('#login').innerHTML = messageHTML
             } else {
+                let token = message.content
+                let tokenDecoded
+                
                 try {
-                    localStorage.setItem('jwt', message.content)
+                    tokenDecoded = JSON.parse(atob(token.split('.')[1]))
+                } catch (e) {
+                    let error = '<strong>An invalid login token was returned.</strong>'
+                    
+                    let messageHTML = '<div class="alert-unknown">' + error + '</div>'
+                    document.querySelector('#login').innerHTML = messageHTML
+                    
+                    return
+                }
+                
+                if (tokenDecoded.remember === 1) {
+                    sessionStorage.removeItem('jwt')
+                    
+                    try {
+                        localStorage.setItem('jwt', token)
+                    } catch (e) {
+                        let error = '<strong>Your local storage is full. Please delete it and login again.</strong>'
+                        
+                        let messageHTML = '<div class="alert-unknown">' + error + '</div>'
+                        document.querySelector('#login').innerHTML = messageHTML
+                        
+                        return
+                    }
                     
                     // wait until the data has been written
-                    while (localStorage.getItem('jwt') !== message.content) {}
+                    while (localStorage.getItem('jwt') !== token) {}
                     
                     window.location.href = '/'
-                } catch (e) {
-                    let error = '<strong>Your local storage is full. Please delete it and login again.</strong>'
-                    let messageHTML = '<div class="alert-error">' + error + '</div>'
-                    document.querySelector('#login').innerHTML = messageHTML
+                } else {
+                    localStorage.removeItem('jwt')
+                    
+                    sessionStorage.setItem('jwt', token)
+                    
+                    // wait until the data has been written
+                    while (sessionStorage.getItem('jwt') !== token) {}
+                    
+                    window.location.href = '/'
                 }
             }
         }))

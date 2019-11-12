@@ -102,20 +102,21 @@ module.exports = {
         let query = 'SELECT * FROM rehi_user WHERE login = ? AND (login_created + (30 * 60)) >= UNIX_TIMESTAMP()'
         
         global.db.query(query, key, function (error, results, fields) {
-            let content = '{}'
-            
             if (error) {
                 const errorCode = util.logError(error, error.sql)
-                content = message.create(errorCode, 'error', reid)
+                ws.send(message.create(errorCode, 'error', reid))
             } else {
                 if (results.length == 1) {
                     const uid = results[0].id
                     const username = results[0].username
+                    const remember = results[0].login_remember
                     const jti = util.UUID4()
                     
                     query = 'UPDATE rehi_user SET confirmed = 1, token = ?, login = "", login_created = 0 WHERE id = ?'
                     
                     global.db.query(query, [jti, uid], function (error, results, fields) {
+                        let content = '{}'
+                        
                         if (error) {
                             const errorCode = util.logError(error, error.sql)
                             content = message.create(errorCode, 'error', reid)
@@ -123,6 +124,7 @@ module.exports = {
                             const token = jwt.sign({
                                 uid: uid,
                                 username: username,
+                                remember: remember,
                                 chk: Math.floor(Date.now() / 1000) + global.jwt.recheckIn,
                                 exp: Math.floor(Date.now() / 1000) + global.jwt.expiresIn,
                                 jti: jti
@@ -133,15 +135,59 @@ module.exports = {
                         
                         ws.send(content)
                     })
-                    
-                    return
                 } else {
                     const errorCode = util.logError('Unable to login with the following key', key)
-                    content = message.create(errorCode, 'error', reid)
+                    ws.send(message.create(errorCode, 'error', reid))
                 }    
             }
-            
-            ws.send(content)
+        })
+    },
+    
+    loginLink: function(account, reid, ws) {
+        let query = 'SELECT * FROM rehi_user WHERE username = ?'
+        
+        global.db.query(query, account.username, function (error, results, fields) {
+            if (error) {
+                const errorCode = util.logError(error, error.sql)
+                ws.send(message.create(errorCode, 'error', reid))
+            } else if (results.length === 0) {
+                ws.send(message.create('You have entered an incorrect username.', 'invalid', reid))
+            } else {
+                const emailAddress = results[0].email
+                
+                const login = crypto.randomBytes(64).toString('base64')
+                const loginCreated = Math.floor(Date.now() / 1000)
+                
+                query = 'UPDATE rehi_user SET login = ?, login_created = ?, login_remember = ? WHERE username = ?'
+                const queryValues = [login, loginCreated, account.remember, account.username]
+                
+                global.db.query(query, queryValues, function (error, results, fields) {
+                    let content = '{}'
+                    
+                    if (error) {
+                        const errorCode = util.logError(error, error.sql)
+                        content = message.create(errorCode, 'error', reid)
+                    } else {
+                        let link = global.paths.siteurl + '/login.html?key=' + encodeURIComponent(login)
+                        let body = '<p><strong>Rehi ' + account.username + '&nbsp;&nbsp;;-)</strong></p>'
+                        body += '<p>Please click the following link to login to your account.</p>'
+                        body += '<p><a href="' + link + '">Login to Rehi</a></p>'
+                        
+                        const email = {
+                            to: emailAddress,
+                            from: global.email.from,
+                            subject: 'Rehi Login',
+                            html: body,
+                        }
+                        
+                        global.sendgrid.send(email)
+                        
+                        content = message.create('', 'success', reid)
+                    }
+                    
+                    ws.send(content)
+                })
+            }
         })
     },
     

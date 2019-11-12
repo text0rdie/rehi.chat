@@ -25,10 +25,58 @@ for (const th of tabHeads) {
     })
 }
 
+document.querySelector('#welcome #welcome-submit').addEventListener('click', function(event) {
+    const account = {
+        username: document.querySelector('#welcome #welcome-username').value,
+        remember: (document.querySelector('#welcome #welcome-remember').checked) ? 1 : 0
+    }
+    
+    client.ws.send(client.createMessage(account, 'account-login-link', function(message) {
+        let messageHTML = ''
+        
+        switch (message.type) {
+            case 'success' :
+                messageHTML  = '<div class="alert-success">'
+                messageHTML += 'We have sent a login link to your email address.'
+                messageHTML += '</div>'
+                
+                break
+            case 'invalid' :
+                messageHTML = '<div class="alert-invalid">' + message.content + '</div>'
+                
+                break
+            default :
+                let error = '<strong>There was an error processing your request. Please try again.</strong>'
+                error += '<br>' + message.content
+                
+                messageHTML = '<div class="alert-unknown">' + error + '</div>'
+        }
+        
+        document.querySelector('#welcome #welcome-title').style.display = 'none'
+        document.querySelector('#welcome #welcome-message').innerHTML = messageHTML
+    }))
+})
+
 document.querySelector('#welcome #welcome-signup').addEventListener('click', function(event) {
     document.querySelector('#welcome').style.display = 'none'
     document.querySelector('#signup').style.display = 'block'
     document.querySelector('#signup #signup-username').focus()
+})
+
+document.querySelector('#welcome #welcome-continue').addEventListener('click', function(event) {
+    document.querySelector('#welcome').style.display = 'none'
+    document.querySelector('#chat textarea').focus()
+})
+
+document.querySelector('#signup #signup-close').addEventListener('click', function(event) {
+    document.querySelector('#signup').style.display = 'none'
+    document.querySelector('#chat textarea').focus()
+})
+
+document.querySelector('#signup #signup-goback').addEventListener('click', function(event) {
+    document.querySelector('#signup').style.display = 'none'
+    document.querySelector('#welcome').style.display = 'block'
+    document.querySelector('#welcome #welcome-username').focus()
 })
 
 document.querySelector('#signup #signup-submit').addEventListener('click', function(event) {
@@ -66,22 +114,6 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
         
         document.querySelector('#signup #signup-message').innerHTML = messageHTML
     }))
-})
-
-document.querySelector('#signup #signup-close').addEventListener('click', function(event) {
-    document.querySelector('#signup').style.display = 'none'
-    document.querySelector('#chat textarea').focus()
-})
-
-document.querySelector('#welcome #welcome-continue').addEventListener('click', function(event) {
-    document.querySelector('#welcome').style.display = 'none'
-    document.querySelector('#chat textarea').focus()
-})
-
-document.querySelector('#signup #signup-goback').addEventListener('click', function(event) {
-    document.querySelector('#signup').style.display = 'none'
-    document.querySelector('#welcome').style.display = 'block'
-    document.querySelector('#welcome #welcome-username').focus()
 })
 
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {

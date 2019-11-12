@@ -199,16 +199,19 @@ wssServer.on('connection', function(ws, request) {
                         const content = msg.content
                         
                         switch (msg.type) {
-                            case 'account-create'  :
+                            case 'account-create'     :
                                 account.create(content, msg.id, ws)
                                 break
-                            case 'account-login'   :
+                            case 'account-login'      :
                                 account.login(content, msg.id, ws, clientId)
                                 break
-                            case 'account-connect' :
+                            case 'account-login-link' :
+                                account.loginLink(content, msg.id, ws)
+                                break
+                            case 'account-connect'    :
                                 account.connect(user)
                                 break
-                            case 'channel-message' :
+                            case 'channel-message'    :
                                 channel.message(content, user)
                                 break
                         }
