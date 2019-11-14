@@ -8,7 +8,7 @@ import * as client from './lib/client.js'
  * and I don't want to add an extra build step to populate a version statically. The files are tiny right 
  * now, and so it shouldn't introduce much overhead, but I may have to revisit this in the future.
  *
- * e.g. Apache with a 1 second expiration (mod_expires must be enabled)
+ * e.g. Apache with a 1 second expiration (mod_expires and mod_headers must be enabled)
  *
  * <FilesMatch "\.(html|css|js)$">
  *     ExpiresActive On
