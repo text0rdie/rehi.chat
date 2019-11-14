@@ -24,7 +24,6 @@ global.guest = 0
 global.db = null
 
 let config
-let db
 
 let tlsPort
 let tlsServer
@@ -36,82 +35,13 @@ try {
         fs.readFileSync(path.resolve(__dirname, 'config.json'))
     )
     
-    if (typeof config.debug === 'boolean') {
-        global.debug = config.debug
-    }
-    
-    if (!config.paths) {
-        throw 'config.json is missing the server paths (paths)'
-    } else {
-        if (!config.paths.siteurl) {
-            throw 'config.json is missing the Site URL (paths.siteurl)'
-        }
-        
-        global.paths = config.paths
-    }
-    
-    if (!config.jwt) {
-        throw 'config.json is missing the JSON Web Token settings (jwt)'
-    } else {
-        if (!config.jwt.secret) {
-            throw 'config.json is missing the JWT secret key (jwt.secret)'
-        }
-        
-        if (!config.jwt.expiresIn) {
-            throw 'config.json is missing the JWT expiration (jwt.expiresIn)'
-        }
-        
-        if (!config.jwt.recheckIn) {
-            throw 'config.json is missing the JWT refresh interval (jwt.recheckIn)'
-        }
-        
-        global.jwt = config.jwt
-        
-        global.jwt.expiresIn = parseInt(global.jwt.expiresIn, 10) || 0
-        global.jwt.recheckIn = parseInt(global.jwt.recheckIn, 10) || 0
-    }
-    
-    if (!config.api) {
-        throw 'config.json is missing the API settings (api)'
-    } else {
-        if (!config.api.sendgrid) {
-            throw 'config.json is missing the API key for SendGrid (api.sendgrid)'
-        } else {
-            global.sendgrid.setApiKey(config.api.sendgrid)
-        }
-    }
-    
-    if (!config.email) {
-        throw 'config.json is missing the email settings (email)'
-    } else {
-        if (!config.email.from) {
-            throw 'config.json is missing the From email (email.from)'
-        }
-        
-        global.email = config.email
-    }
+    util.parseConfig(config)
 } catch (error) {
     util.log('err', 'Unable to parse config.json', error)
     process.exit(1)
 }
 
 try {
-    if (!config.db.host) {
-        throw 'config.json is missing the database host (db.host)'
-    }
-    
-    if (!config.db.user) {
-        throw 'config.json is missing the database user (db.user)'
-    }
-    
-    if (!config.db.password) {
-        throw 'config.json is missing the database user\'s password (db.password)'
-    }
-    
-    if (!config.db.database) {
-        throw 'config.json is missing the database name (db.database)'
-    }
-    
     global.db = mysql.createConnection({
         host : config.db.host,
         user : config.db.user,
@@ -124,7 +54,7 @@ try {
 }
 
 global.db.on('error', function(error) {
-    if (error.code === 'ECONNREFUSED') {
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
         util.log('err', 'Unable to connect to the database', error)
         process.exit(1)
     } else {
