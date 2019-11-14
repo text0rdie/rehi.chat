@@ -4,13 +4,12 @@ import * as account from './account.js'
 
 let callbacks = []
 
-// chrome://flags/#allow-insecure-localhost must be enabled when testing locally in Chrome
 const ws = new WebSocket('wss://' + window.location.hostname + ':8080')
 
 ws.onmessage = function(message) {
     try {
         message = JSON.parse(message.data)
-        content = message.content
+        const content = message.content
         
         if (typeof message.reid !== 'undefined') {
             callbacks[message.reid](message)

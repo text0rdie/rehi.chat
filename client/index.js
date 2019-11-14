@@ -1,5 +1,26 @@
 import * as client from './lib/client.js'
 
+/* IMPORTANT
+ * 
+ * Your web server must be configured with a short expiration time for HTML, CSS and JavaScript files.
+ * The JavaScript files are the most important as browsers appear to cache them aggressively.
+ * The usual solution of appending a dynamic timestamp doesn't work with the import/export module system,
+ * and I don't want to add an extra build step to populate a version statically. The files are tiny right 
+ * now, and so it shouldn't introduce much overhead, but I may have to revisit this in the future.
+ *
+ * e.g. Apache with a 1 second expiration (mod_expires must be enabled)
+ *
+ * <FilesMatch "\.(html|css|js)$">
+ *     ExpiresActive On
+ *     ExpiresDefault A1
+ *     Header append Cache-Control must-revalidate
+ * </FilesMatch>
+ *
+ * Your browser must have the following flag enabled when testing locally on Chrome
+ * chrome://flags/#allow-insecure-localhost
+ *
+ */
+
 client.ws.onopen = function(event) {
     client.ws.send(client.createMessage('', 'account-connect'))
 }
