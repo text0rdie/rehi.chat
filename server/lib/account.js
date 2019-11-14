@@ -121,12 +121,14 @@ module.exports = {
                             const errorCode = util.logError(error, error.sql)
                             content = message.create(errorCode, 'error', reid)
                         } else {
+                            const nowTimestamp = Math.floor(Date.now() / 1000)
+                            
                             const token = jwt.sign({
                                 uid: uid,
                                 username: username,
                                 remember: remember,
-                                chk: Math.floor(Date.now() / 1000) + global.jwt.recheckIn,
-                                exp: Math.floor(Date.now() / 1000) + global.jwt.expiresIn,
+                                chk: nowTimestamp + global.jwt.recheckIn,
+                                exp: nowTimestamp + global.jwt.expiresIn,
                                 jti: jti
                             }, global.jwt.secret)
                             
@@ -187,6 +189,50 @@ module.exports = {
                     
                     ws.send(content)
                 })
+            }
+        })
+    },
+    
+    token: function(tokenOld, ws, callback) {
+        let query = 'SELECT * FROM rehi_user WHERE id = ? AND token = ?'
+        
+        global.db.query(query, [tokenOld.uid, tokenOld.jti], function (error, results, fields) {
+            if (error) {
+                const errorCode = util.logError(error, error.sql)
+                ws.send(message.create(errorCode, 'account-logout'))
+            } else {
+                if (results.length == 1) {
+                    const jti = util.UUID4()
+                    
+                    query = 'UPDATE rehi_user SET token = ? WHERE id = ?'
+                    
+                    global.db.query(query, [jti, tokenOld.uid], function (error, results, fields) {
+                        let content = '{}'
+                        
+                        if (error) {
+                            const errorCode = util.logError(error, error.sql)
+                            ws.send(message.create(errorCode, 'account-logout'))
+                        } else {
+                            const nowTimestamp = Math.floor(Date.now() / 1000)
+                            
+                            const token = jwt.sign({
+                                uid: tokenOld.uid,
+                                username: tokenOld.username,
+                                remember: tokenOld.remember,
+                                chk: nowTimestamp + global.jwt.recheckIn,
+                                exp: tokenOld.exp,
+                                jti: jti
+                            }, global.jwt.secret)
+                            
+                            content = message.create(token, 'account-token')
+                        }
+                        
+                        ws.send(content, callback)
+                    })
+                } else {
+                    const errorCode = util.logError('Unable to refresh token for user #' + tokenOld.uid, tokenOld.jti)
+                    ws.send(message.create(errorCode, 'account-logout'))
+                }    
             }
         })
     },

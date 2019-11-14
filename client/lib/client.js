@@ -20,10 +20,16 @@ ws.onmessage = function(message) {
                 case 'account-connect' :
                     account.connect(content)
                     break
+                case 'account-token'   :
+                    account.token(content)
+                    break
+                case 'account-logout'  :
+                    account.logout(content)
+                    break
                 case 'channel-message' :
                     channel.message(content)
                     break
-                case 'channel-users' :
+                case 'channel-users'   :
                     channel.users(content)
                     break
             }

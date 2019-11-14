@@ -58,7 +58,7 @@ document.querySelector('#welcome #welcome-submit').addEventListener('click', fun
                 messageHTML = '<div class="alert-unknown">' + error + '</div>'
         }
         
-        document.querySelector('#welcome #welcome-title').style.display = 'none'
+        document.querySelector('#welcome .modal-title').style.display = 'none'
         document.querySelector('#welcome #welcome-message').innerHTML = messageHTML
     }))
 })
@@ -126,6 +126,10 @@ document.querySelector('#signup #signup-submit').addEventListener('click', funct
         
         document.querySelector('#signup #signup-message').innerHTML = messageHTML
     }))
+})
+
+document.querySelector('#logout #logout-submit').addEventListener('click', function(event) {
+    window.location.href = '/'
 })
 
 document.querySelector('#chat textarea').addEventListener('keydown', function(event) {

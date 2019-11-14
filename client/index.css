@@ -151,15 +151,18 @@
     padding-right: 15px;
 }
 
-#welcome #welcome-title {
-    font-size: 1.2rem;
-    font-weight: bold;
+#welcome .modal-title {
     margin-top: 20px;
+    margin-bottom: 0px;
 }
 
 #welcome ul {
     margin-top: 0px;
     margin-bottom: 20px;
+}
+
+#signup .modal-title {
+    color: #3399FF;
 }
 
 #signup #signup-form {
@@ -171,11 +174,4 @@
 
 #signup #signup-email {
     width: 300px;
-}
-
-#signup #signup-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #3399FF;
 }

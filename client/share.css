@@ -59,6 +59,12 @@ a {
     z-index: 1;
 }
 
+.modal-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 .modal-content {
     display: grid;
     grid-template-rows: auto;
