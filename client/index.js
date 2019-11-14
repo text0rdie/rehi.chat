@@ -25,6 +25,12 @@ for (const th of tabHeads) {
     })
 }
 
+document.querySelector('#welcome #welcome-username').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        document.querySelector('#welcome #welcome-submit').click()
+    }
+})
+
 document.querySelector('#welcome #welcome-submit').addEventListener('click', function(event) {
     const account = {
         username: document.querySelector('#welcome #welcome-username').value,
@@ -77,6 +83,12 @@ document.querySelector('#signup #signup-goback').addEventListener('click', funct
     document.querySelector('#signup').style.display = 'none'
     document.querySelector('#welcome').style.display = 'block'
     document.querySelector('#welcome #welcome-username').focus()
+})
+
+document.querySelector('#signup #signup-email').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        document.querySelector('#signup #signup-submit').click()
+    }
 })
 
 document.querySelector('#signup #signup-submit').addEventListener('click', function(event) {
