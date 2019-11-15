@@ -6,6 +6,8 @@ function connect(user) {
     if (user.isGuest) {
         document.querySelector('#welcome').style.display = ''
     }
+    
+    window.user = user
 }
 
 function token(token) {

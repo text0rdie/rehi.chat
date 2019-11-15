@@ -5,7 +5,7 @@ const message = require('./message.js')
 
 module.exports = {
     message: function(content, user) {
-        msgName = message.highlight(user.name, 'name') + ' says'
+        msgName = message.highlight(user.name, 'name', 'r') + ' says'
         content = message.highlight(content, 'message')
         content = message.highlight(msgName, 'says') + content
         

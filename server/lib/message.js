@@ -12,7 +12,8 @@ module.exports = {
         })
     },
     
-    highlight: function(text, type) {
-        return '<span class="highlight-' + type + '">' + text + '</span>'
+    highlight: function(text, type, margin) {
+        const marginClass = (margin) ? ' highlight-margin-' + margin : ''
+        return '<span class="highlight-' + type + marginClass + '">' + text + '</span>'
     }
 }

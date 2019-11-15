@@ -93,7 +93,8 @@ module.exports = {
             isGuest: true
         }
         
-        if (global.guest > 9999) {
+        // 15 characters is our maximum username size
+        if (global.guest > 9999999999) {
             global.guest = 0
         }
     },
@@ -239,19 +240,20 @@ module.exports = {
     
     connect: function(user) {
         util.log('sys', user.name + ' has connected')
-        send.all(message.highlight(user.name, 'name') + ' has connected', 'channel-message', user.client)
-        
-        channel.users(user.client)
+        user.client.send(message.create(user, 'account-connect'))
         
         let welcome = ''
         
         if (user.isGuest) {
-            welcome = 'Welcome! Your name has been auto-generated as ' + message.highlight(user.name, 'name')
+            welcome = 'Welcome! Your name has been auto-generated as ' + message.highlight(user.name, 'name', 'l')
         } else {
-            welcome = 'Welcome! You are logged in as ' + message.highlight(user.name, 'name')
+            welcome = 'Welcome! You are logged in as ' + message.highlight(user.name, 'name', 'l')
         }
         
-        user.client.send(message.create(user, 'account-connect'))
         user.client.send(message.create(welcome, 'channel-message'))
+        
+        channel.users(user.client)
+        
+        send.all(message.highlight(user.name, 'name', 'r') + ' has connected', 'channel-message', user.client)
     }
 }
