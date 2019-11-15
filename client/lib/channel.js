@@ -1,6 +1,6 @@
 function message(content) {
     const nameFind = /(<span class="highlight-name">)(.*?)(<\/span>)/
-    const nameReplace = '$1<a href="/user/" target="_blank">$2</a>$3'
+    const nameReplace = '$1<a href="/user/$2">$2</a>$3'
     
     content = content.replace(nameFind, nameReplace)
     content = '<div class="content">' + content + '</div>'
