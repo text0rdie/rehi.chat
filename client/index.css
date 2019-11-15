@@ -158,15 +158,12 @@
 #welcome .modal-title {
     margin-top: 20px;
     margin-bottom: 0px;
+    color: #FFFFFF;
 }
 
 #welcome ul {
     margin-top: 0px;
     margin-bottom: 20px;
-}
-
-#signup .modal-title {
-    color: #0031FF;
 }
 
 #signup #signup-form {

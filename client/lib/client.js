@@ -23,7 +23,7 @@ ws.onmessage = function(message) {
                     account.token(content)
                     break
                 case 'account-logout'  :
-                    account.logout(content)
+                    account.logout(content, ws)
                     break
                 case 'channel-message' :
                     channel.message(content)

@@ -44,11 +44,11 @@ function token(token) {
     }
 }
 
-function logout(errorCode) {
+function logout(errorCode, ws) {
     localStorage.removeItem('jwt')
     sessionStorage.removeItem('jwt')
     
-    if (typeof errorCode == 'string') {
+    if (typeof errorCode == 'string' && errorCode !== '') {
         let error = '<strong>There was an authentication error. Please login again.</strong>'
         error += '<br>' + errorCode
                 
@@ -57,6 +57,8 @@ function logout(errorCode) {
     }
     
     document.querySelector('#logout').style.display = ''
+    
+    ws.close()
 }
 
 export { connect, token, logout }
