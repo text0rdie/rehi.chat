@@ -96,6 +96,10 @@
     grid-template-rows: 100%;
 }
 
+#channel #users > ul {
+    line-height: 2.0;
+}
+
 /* Tabs */
 
 .tabs {
@@ -120,7 +124,7 @@
 
 .tabs > .head > div:hover,
 .tabs > .head > div.active {
-    border-bottom: 2px solid #3399FF;
+    border-bottom: 2px solid #0031FF;
 }
 
 .tabs > .body {
@@ -162,7 +166,7 @@
 }
 
 #signup .modal-title {
-    color: #3399FF;
+    color: #0031FF;
 }
 
 #signup #signup-form {

@@ -10,13 +10,13 @@ body {
 
 ul {
     padding-left: 30px;
-    line-height: 2.0;
+    line-height: 1.7;
 }
 
 textarea {
     width: 100%;
     background-color: #18181F;
-    border: 1px solid #3399FF;
+    border: 2px solid #0031FF;
     color: #FFFFFF;
     padding: 5px;
     height: 30px;
@@ -92,14 +92,15 @@ a {
 }
 
 .modal-button.primary {
-    background-color: #3399FF;
+    background-color: #0031FF;
+    font-weight: 600;
     color: #18181F;
 }
 
 /* Text Highlights */
 
 .important {
-    color: #FF0000;
+    color: #FF0031;
 }
 
 /* Alerts */
@@ -113,7 +114,7 @@ a {
 }
 
 .alert-invalid {
-    background-color: #FF0000;
+    background-color: #FF0031;
 }
 
 /* Spinners */
