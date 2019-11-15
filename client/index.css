@@ -139,6 +139,14 @@
 
 /* Modals */
 
+#connect {
+    background-color: rgba(24, 24, 31, 0);
+}
+
+#connect .modal-content {
+    padding-top: 0px;
+}
+
 #welcome #welcome-login {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, max-content));

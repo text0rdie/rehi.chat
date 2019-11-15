@@ -1,4 +1,6 @@
 function connect(user) {
+    document.querySelector('#connect').style.display = 'none'
+    
     document.querySelector('#server #name').innerHTML = '@ ' + user.name
     
     if (user.isGuest) {
