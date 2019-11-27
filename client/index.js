@@ -163,3 +163,23 @@ document.querySelector('#chat textarea').addEventListener('keydown', function(ev
         event.preventDefault()
     }
 })
+
+document.querySelector('#channels #channels-toggle').addEventListener('click', function(event) {
+    if (event.target.getAttribute('data-toggle') === 'open') {
+        event.target.setAttribute('data-toggle', 'closed')
+        event.target.innerHTML = '&#9650;'
+        
+        document.querySelector('#channels .help').style.display = 'none'
+        document.querySelector('#channels .channel').style.display = 'none'
+        
+        document.querySelector('#channels .section').style.marginBottom = '15px'
+    } else {
+        event.target.setAttribute('data-toggle', 'open')
+        event.target.innerHTML = '&#9660;'
+        
+        document.querySelector('#channels .help').style.display = 'grid'
+        document.querySelector('#channels .channel').style.display = 'grid'
+        
+        document.querySelector('#channels .section').style.marginBottom = '10px'
+    }
+})
