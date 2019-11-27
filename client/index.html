@@ -36,8 +36,8 @@
                                 
                                 <div class="help">
                                     <div>
-                                        <a class="button">Browse</a> and search thousands of channels, join a community 
-                                        or <a class="button">create</a> one of your own.
+                                        <a class="button" id="channels-browse">Browse</a> and search thousands of channels, join a community 
+                                        or <a class="button" id="channels-create">create</a> one of your own.
                                     </div>
                                 </div>
                                 
@@ -80,9 +80,8 @@
                 <div class="tabs">
                     <div class="head">
                         <div class="active" data-id="info">Channel</div>
-                        <div data-id="users">Users</div>
+                        <div data-id="users">Users / Bots</div>
                         <div data-id="wiki">Wiki</div>
-                        <div data-id="blogs">Blogs</div>
                     </div>
                     
                     <div class="body" data-type="block" id="info">
@@ -90,15 +89,11 @@
                     </div>
                     
                     <div class="body" data-type="block" id="users" style="display: none">
-                        <ul><li>Users</li></ul>
+                        <ul><li>Users / Bots</li></ul>
                     </div>
                     
                     <div class="body" data-type="block" id="wiki" style="display: none">
                         <ul><li>Wiki</li></ul>
-                    </div>
-                    
-                    <div class="body" data-type="block" id="blogs" style="display: none">
-                        <ul><li>Blogs</li></ul>
                     </div>
                 </div>
             </div>
@@ -132,7 +127,7 @@
             <div id="welcome-message">
                 <ul>
                     <li>Over 20,000 users and 1,000 channels to explore</li>
-                    <li>Create your own channels, with integrated wikis and blogs, for free</li>
+                    <li>Create your own channels, with integrated wikis, for free</li>
                     <li>Lightweight, text focused and with accessibility built it</li>
                     <li>No advertising, ever</li>
                 </ul>
@@ -180,6 +175,17 @@
             
             <div class="modal-buttons">
                 <div class="modal-button primary" id="logout-submit">Login Again</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="channel-create" style="display: none">
+        <div class="modal-content">
+            <div class="modal-title">New Channel</div>
+            
+            <div class="modal-buttons">
+                <div class="modal-button" id="channel-create-close">Close</div>
+                <div class="modal-button primary" id="channel-create-submit">Create</div>
             </div>
         </div>
     </div>

@@ -183,3 +183,11 @@ document.querySelector('#channels #channels-toggle').addEventListener('click', f
         document.querySelector('#channels .section').style.marginBottom = '10px'
     }
 })
+
+document.querySelector('#channels #channels-create').addEventListener('click', function(event) {
+    document.querySelector('#channel-create').style.display = 'block'
+})
+
+document.querySelector('#channel-create #channel-create-close').addEventListener('click', function(event) {
+    document.querySelector('#channel-create').style.display = 'none'
+})
