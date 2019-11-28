@@ -204,10 +204,6 @@
 
 /* Modals */
 
-#connect {
-    background-color: rgba(24, 24, 31, 0);
-}
-
 #connect .modal-content {
     padding-top: 0px;
 }

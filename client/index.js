@@ -23,9 +23,9 @@ import * as client from './lib/client.js'
 
 window.user = null
 
-client.ws.onopen = function(event) {
+client.create(function(event) {
     client.ws.send(client.createMessage('', 'account-connect'))
-}
+})
 
 const tabHeads = document.querySelectorAll('.tabs > .head > div')
 

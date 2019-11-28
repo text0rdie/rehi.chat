@@ -1,7 +1,7 @@
 import * as util from './lib/util.js'
 import * as client from './lib/client.js'
 
-client.ws.onopen = function(event) {
+client.create(function(event) {
     setTimeout(function() {
         client.ws.send(client.createMessage(util.queryString['key'], 'account-login', function(message) {
             if (message.type === 'error') {
@@ -56,4 +56,4 @@ client.ws.onopen = function(event) {
             }
         }))
     }, 3000)
-}
+})

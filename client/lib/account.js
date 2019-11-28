@@ -10,6 +10,10 @@ function connect(user) {
     window.user = user
 }
 
+function disconnect() {
+    document.querySelector('#connect').style.display = 'block'
+}
+
 function token(token) {
     let tokenDecoded
     
@@ -65,4 +69,4 @@ function logout(errorCode, ws) {
     ws.close()
 }
 
-export { connect, token, logout }
+export { connect, disconnect, token, logout }
