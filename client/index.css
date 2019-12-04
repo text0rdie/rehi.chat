@@ -245,3 +245,19 @@
 #signup #signup-email {
     width: 300px;
 }
+
+#channel-create #channel-create-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+    grid-column-gap: 15px;
+    justify-content: end;
+}
+
+#channel-create #channel-create-form > div {
+    display: grid;
+    align-items: center;
+}
+
+#channel-create #channel-create-form > div > div {
+    padding-right: 15px;
+}

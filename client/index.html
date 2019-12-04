@@ -181,7 +181,19 @@
     
     <div class="modal" id="channel-create" style="display: none">
         <div class="modal-content">
-            <div class="modal-title">New Channel</div>
+            <div class="modal-title">Create a New Channel</div>
+            
+            <div id="channel-create-form">
+                <div><div><input type="checkbox" value="1" id="channel-create-private">Private</div></div>
+                <div><input type="text" placeholder="Channel Name" id="channel-create-name"></div>
+            </div>
+            
+            <div id="channel-create-message">
+                <ul>
+                    <li class="important">You may only own or moderate a maximum of 3 public channels</li>
+                    <li>The sidebar and settings can be configured afterwards using &#9881;</li>
+                </ul>
+            </div>
             
             <div class="modal-buttons">
                 <div class="modal-button" id="channel-create-close">Close</div>

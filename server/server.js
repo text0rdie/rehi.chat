@@ -123,6 +123,7 @@ wssServer.on('connection', function(ws, request) {
                             global.users[clientId] = {
                                 client: ws,
                                 clientId: clientId,
+                                dbId: token.uid,
                                 name: token.username,
                                 isGuest: false
                             }
@@ -148,6 +149,9 @@ wssServer.on('connection', function(ws, request) {
                                     break
                                 case 'channel-message'    :
                                     channel.message(content, user)
+                                    break
+                                case 'channel-create'    :
+                                    channel.create(content, user, msg.id, ws)
                                     break
                             }
                         } catch (e) {

@@ -191,3 +191,35 @@ document.querySelector('#channels #channels-create').addEventListener('click', f
 document.querySelector('#channel-create #channel-create-close').addEventListener('click', function(event) {
     document.querySelector('#channel-create').style.display = 'none'
 })
+
+document.querySelector('#channel-create #channel-create-submit').addEventListener('click', function(event) {
+    const channel = {
+        name: document.querySelector('#channel-create #channel-create-name').value,
+        type: (document.querySelector('#channel-create #channel-create-private').checked) ? 1 : 0
+    }
+    
+    client.ws.send(client.createMessage(channel, 'channel-create', function(message) {
+        let messageHTML = ''
+        
+        switch (message.type) {
+            case 'success' :
+                document.querySelector('#channel-create').style.display = 'none'
+                
+                // TODO: add to My Channels and switch to it
+                console.log('channel created')
+                
+                break
+            case 'invalid' :
+                messageHTML = '<div class="alert-invalid">' + message.content + '</div>'
+                
+                break
+            default :
+                let error = '<strong>There was an error processing your request. Please try again.</strong>'
+                error += '<br>' + message.content
+                
+                messageHTML = '<div class="alert-unknown">' + error + '</div>'
+        }
+        
+        document.querySelector('#channel-create #channel-create-message').innerHTML = messageHTML
+    }))
+})
